@@ -1,0 +1,31 @@
+1) Fetch only the first name from the full name column 
+
+select substring(fullname, 0, charindex (' ',fullname)) from employee;
+
+
+
+2) Fetch Duplicate record from a table
+
+select emp_id, dept, count(*)
+from employee
+group by emp_id, dept
+having count(*) > 1;
+
+
+
+3) Remove Duplicates 
+
+Delete from employees
+where emp_id IN (select emp_id from employees group by dept having count(*) > 1);
+
+
+4) Create empty table with same structure as some other table
+
+select * into newtable from oldtable where 1=0; (Thus is False condition so here only structure will be cretaed )
+
+
+5) Fetch Common record between 2 Tables
+
+select * from tbale1
+intersect 
+select * from table2
