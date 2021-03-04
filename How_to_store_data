@@ -1,0 +1,13 @@
+https://www.sqlshack.com/importing-and-working-with-csv-files-in-sql-server/
+
+
+
+create procedure First_Last_1
+As
+select FirstName,LastName
+from awpc
+Go;
+
+
+
+
