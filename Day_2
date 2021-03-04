@@ -1,0 +1,37 @@
+select * from nobel_win
+where (subject='Physiology' and year < 1971)
+UNION 
+(select * from nobel_win where (subject='Physiology' and year >= 1974));
+
+
+select * from nobel_win 
+where winner = 'Johannes Georg Bednorz';
+
+select * from nobel_win 
+where subject not like 'P%'
+order by YEAR DESC, winner;
+
+
+
+Write a SQL query to find the item name and price in Rs.
+
+
+select PRO_NAME as "ITEM_NAME", PRO_PRICE as "Price in Rs."
+from item_mast 
+
+
+
+Write a SQL query to display the name and price of all the items with a price is equal or more than Rs.250, and the list contain the larger price first and then by name in ascending order.
+
+
+select PRO_NAME,PRO_PRICE 
+from item_mast 
+where PRO_PRICE >= 250
+order by PRO_PRICE DESC,PRO_NAME ASC;
+
+Write a SQL query to display the average price of the items for each company, showing only the company code
+
+select AVG(PRO_PRICE),PRO_COM
+from item_mast 
+group by PRO_COM
+
