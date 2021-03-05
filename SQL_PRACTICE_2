@@ -1,0 +1,74 @@
+CREATE TABLE Table1
+(
+PersonID int,
+abr varchar(255),
+city varchar(255))
+
+Create Table Table2(
+PersonID int,
+compund_name varchar(255),
+number int
+)
+
+insert into Table1(PersonID,abr,city)VALUES ('1','RD','Jaipur');
+insert into Table1(PersonID,abr,city) Values('2','SP','Mumbai');
+insert into Table1(PersonID,abr,city) Values('3','PB','Pune');
+insert into Table1(PersonID,abr,city) Values('4','AJ','Banglore');
+
+insert into Table2(PersonID,compund_name,number) Values('1','C20','30');
+insert into Table2(PersonID,compund_name,number) Values('1','AOH','20');
+insert into Table2(PersonID,compund_name,number) Values('1','BAR','10');
+insert into Table2(PersonID,compund_name,number) Values('2','SSL','15');
+insert into Table2(PersonID,compund_name,number) Values('2','MVP','25');
+insert into Table2(PersonID,compund_name,number) Values('2','C20','40');
+insert into Table2(PersonID,compund_name,number) Values('2','AOH','60');
+insert into Table2(PersonID,compund_name,number) Values('2','BAS','70');
+
+
+select * from Table2;
+
+
+
+***************
+
+
+
+select PersonId,PI1,PI2,PI3,PI4,PI5
+from 
+(
+select PersonID,compund_name,number,
+'PI' + 
+CAST(ROW_NUMBER() 
+over (Partition By PersonID order by PersonID) as varchar(10)) ColumnSequence
+from Table2
+)Temp
+PIVOT(
+MAX(compund_name)
+for ColumnSequence in (PI1,PI2,PI3,PI4,PI5)
+)PIV
+
+
+
+
+**************
+
+
+https://tothecore.sk/2019/01/24/transpose-rows-into-columns-in-ms-sql/
+
+
+
+select FormId, max(FirstName) as FirstName, max(MiddleName) as MiddleName, max(LastName) as LastName, max(Email) as Email 
+from (
+    select FormId
+         , case when FieldName = 'FirstName' then Value end as FirstName
+         , case when FieldName = 'MiddleName' then Value end as MiddleName 
+         , case when FieldName = 'LastName' then Value end as LastName 
+         , case when FieldName = 'Email' then Value end as Email 
+    from #Temp
+) as t 
+group by FormId;
+
+
+
+
+
