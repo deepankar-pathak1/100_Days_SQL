@@ -64,6 +64,19 @@ GROUP BY COUNTRY.CONTINENT;
 
 
 
+****
+
+
+select CITY.NAME
+from 
+CITY 
+INNER JOIN 
+COUNTRY 
+ON CITY.COUNTRYCODE = COUNTRY.CODE 
+WHERE COUNTRY.CONTINENT = 'Africa';
+
+
+
 ************
 
 
@@ -73,3 +86,22 @@ Query the difference between the maximum and minimum populations in CITY.
 
 SELECT (MAX(POPULATION) - MIN(POPULATION)) AS DIFF
 FROM CITY
+
+
+***************
+
+
+>>>***<<<<
+
+Query the Euclidean Distance between points  and  and format your answer to display  decimal digits.
+
+SELECT 
+ROUND(SQRT(POWER((MIN(LAT_N)-MAX(LAT_N)),2) + POWER((MIN(LONG_W)-MAX(LONG_W)),2)),4)
+FROM 
+STATION;
+
+
+
+****
+
+
