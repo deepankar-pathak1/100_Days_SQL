@@ -1,0 +1,75 @@
+Query the list of CITY names from STATION that do not start with vowels and do not end with vowels. Your result cannot contain duplicates.
+
+select distinct city
+from station 
+where city like '[^aeiou]%[^aeiou]';
+
+
+******************* 
+
+Write a query identifying the type of each record in the TRIANGLES table using its three side lengths. Output one of the following statements for each record in the table:
+
+Equilateral: It's a triangle with  sides of equal length.
+Isosceles: It's a triangle with  sides of equal length.
+Scalene: It's a triangle with  sides of differing lengths.
+Not A Triangle: The given values of A, B, and C don't form a triangle.
+Input Format
+
+The TRIANGLES table is described as follows:
+
+
+
+SELECT CASE 
+            WHEN A + B > C AND B + C > A AND A + C > B THEN
+                 CASE 
+                     WHEN A = B AND B = C THEN 'Equilateral'
+                     WHEN A = B OR B = C OR A = C THEN 'Isosceles'
+                     ELSE 'Scalene'
+                 END 
+            ELSE 'Not A Triangle'
+        END
+FROM TRIANGLES;
+
+
+**************************
+ TO READ ABOUT 
+
+https://www.w3schools.com/sql/func_sqlserver_coalesce.asp
+
+
+
+*********************
+
+
+select COUNTRY.CONTINENT,FLOOR(AVG(CITY.POPULATION))
+FROM CITY 
+INNER JOIN COUNTRY 
+ON CITY.COUNTRYCODE = COUNTRY.CODE
+GROUP BY COUNTRY.CONTINENT;
+
+
+****************************
+
+
+Given the CITY and COUNTRY tables, query the sum of the populations of all cities where the CONTINENT is 'Asia'.
+
+Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
+
+
+select COUNTRY.CONTINENT,FLOOR(AVG(CITY.POPULATION))
+FROM CITY 
+INNER JOIN COUNTRY 
+ON CITY.COUNTRYCODE = COUNTRY.CODE
+GROUP BY COUNTRY.CONTINENT;
+
+
+
+************
+
+
+Query the difference between the maximum and minimum populations in CITY.
+
+
+
+SELECT (MAX(POPULATION) - MIN(POPULATION)) AS DIFF
+FROM CITY
