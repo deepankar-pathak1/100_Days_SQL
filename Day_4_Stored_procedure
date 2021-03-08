@@ -39,3 +39,225 @@ end;
 drop proc uspProductList;
 
 
+_____---> Parameters in stored Procedure 
+
+
+create Procedure uspFindProducts
+as
+begin 
+select 
+product_name,list_price
+from 
+production.products
+order by list_price
+end;
+
+
+alter procedure uspFindProducts(@min_list_price as DECIMAL)
+as
+begin 
+select 
+product_name,
+list_price
+from production.products
+where list_price >= @min_list_price
+order by list_price;
+end;
+
+exec uspFindProducts 100;
+
+
+
+exec uspFindProducts 200;
+
+
+
+
+alter procedure uspFindProducts(
+@min_list_price as decimal,
+@max_list_price as decimal)
+as begin
+select 
+product_name,
+list_price
+from production.products
+where 
+list_price >= @min_list_price and 
+list_price <= @max_list_price 
+
+order by 
+list_price;
+end;
+
+
+exec uspFindProducts 900,1000;
+
+
+--->
+
+
+alter procedure uspFindProducts(
+@min_list_price as decimal,
+@max_list_price as decimal
+)
+as begin 
+select product_name,
+list_price 
+from production.products
+where 
+list_price >= @min_list_price and 
+list_price <= @max_list_price 
+
+order by 
+list_price;
+end;
+
+
+exec uspFindProducts 100,200;
+
+
+
+
+---->
+
+CREATE  PROC uspGetProductList(
+    @model_year SMALLINT
+) AS 
+BEGIN
+    DECLARE @product_list VARCHAR(MAX);
+
+    SET @product_list = '';
+
+    SELECT
+        @product_list = @product_list + product_name 
+                        + CHAR(10)
+    FROM 
+        production.products
+    WHERE
+        model_year = @model_year
+    ORDER BY 
+        product_name;
+
+    PRINT @product_list;
+END;
+
+
+--->
+
+
+
+----->>>
+
+
+
+alter procedure uspFindProducts(@min_list_price as decimal,
+@max_list_price as decimal, @name as varchar(max))
+as begin 
+select product_name,list_price
+from production.products
+where list_price <= @max_list_price and 
+list_price >= @min_list_price and
+product_name like '%' +  @name  + '%'
+order by list_price;
+end;
+
+execute uspFindProducts
+@min_list_price = 900,
+@max_list_price = 1000,
+@name = 'Trek';
+
+
+
+
+----->>>
+
+
+Predifined Parameters
+
+alter procedure uspFindProducts(
+@min_list_price as decimal = 200,
+@max_list_price as decimal = 1000,
+@name as varchar(max)
+)
+as begin 
+select product_name,list_price 
+from production.products
+where 
+list_price >= @min_list_price and 
+list_price <= @max_list_price and
+product_name like '%' + @name + '%'
+order by list_price;
+end;
+
+
+exec uspFindProducts
+@name = 'Trek';
+
+
+
+DECLARE @model_year AS SMALLINT; 
+
+
+SET @model_year = 2018;
+
+select product_name,model_year
+from 
+production.products
+where model_year = @model_year;
+
+
+DECLARE @model_year AS SMALLINT; 
+
+
+SET @model_year = 2018;
+
+select product_name,model_year
+from 
+production.products
+where model_year = @model_year;
+
+
+declare @product_count int;
+
+select @product_count = (
+select count(*) from production.products
+)
+
+--SELECT @product_count;
+
+print @product_count;
+
+
+
+
+---->>>
+
+
+DECLARE @model_year AS SMALLINT; 
+
+
+SET @model_year = 2018;
+
+select product_name,model_year
+from 
+production.products
+where model_year = @model_year;
+
+
+declare @product_count int;
+
+select @product_count = (
+select count(*) from production.products
+)
+
+--SELECT @product_count;
+
+--print @product_count;
+
+print 'The number of product is ' + cast(@product_count as varchar(max));
+
+
+
+--->>>
+
+
