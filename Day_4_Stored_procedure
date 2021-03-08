@@ -257,6 +257,7 @@ select count(*) from production.products
 print 'The number of product is ' + cast(@product_count as varchar(max));
 
 
+EXEC uspGetProductList 2018
 
 --->>>
 
