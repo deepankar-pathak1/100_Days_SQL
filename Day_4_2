@@ -1,0 +1,25 @@
+select order_id, order_date,
+(
+select MAX(list_price)
+from sales.order_items i 
+where i.order_id = o.order_id)
+as max_list_price
+from sales.orders o 
+order by order_date DESC;
+
+select product_name,list_price
+from production.products where list_price >= ANY(
+select avg(list_price)
+from production.products
+group by brand_id);
+
+The ALL operator returns TRUE if all comparison pairs (scalar_expression, vi) evaluate to TRUE; otherwise, it returns FALSE.
+
+
+select product_name,list_price 
+from production.products
+where list_price >= ALL(
+(select avg(list_price)
+from production.products
+group by brand_id
+));
