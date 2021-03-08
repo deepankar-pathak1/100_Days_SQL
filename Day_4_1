@@ -1,0 +1,48 @@
+Third, SQL Server finds the products whose list price is greater than the average list price of all products with the Strider or Trek brand.
+
+select customer_id from 
+sales.customers
+where city = 'New York';
+
+select * from sales.orders;
+
+select 
+order_id,
+order_date,
+customer_id
+from sales.orders
+where customer_id IN(
+select customer_id
+from sales.customers
+where city='New York'
+)
+order by 
+order_date DESC;
+
+
+select brand_id
+from production.brands
+where brand_name = 'Strider' OR brand_name = 'Trek';
+
+select * from production.products;
+
+select AVG(list_price)
+from production.products
+where brand_id in 
+( select brand_id
+from production.brands
+where brand_name = 'Strider' OR brand_name = 'Trek'
+)
+
+select product_name, list_price 
+from production.products
+where list_price > (
+select AVG(list_price)
+from production.products
+where brand_id in 
+( select brand_id
+from production.brands
+where brand_name = 'Strider' OR brand_name = 'Trek'
+)
+)
+order by list_price;
