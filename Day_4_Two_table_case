@@ -1,0 +1,24 @@
+https://www.sqlservertutorial.net/sql-server-basics/sql-server-create-database/
+https://www.w3schools.com/sql/sql_join_left.asp
+
+select * from Table1;
+select * from Table2;
+
+create view myquery as(
+select PersonID, MAX(C20)  as C20,MAX(AOH) as AOH
+from (
+select PersonId
+, case when compund_name = 'C20' then number end as C20
+, case when compund_name = 'AOH' then number end as AOH
+
+from Table2
+)as t
+group by PersonID);
+
+select * from myquery
+
+select * from Table1;
+
+SELECT Table1.PersonID, Table1.abr, Table1.city, myquery.C20,myquery.AOH
+FROM Table1
+inner JOIN myquery ON Table1.PersonID = myquery.PersonID;
