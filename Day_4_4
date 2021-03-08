@@ -1,0 +1,27 @@
+SQL Server PIVOT
+
+
+select * from production.products ;
+select * from production.categories;
+
+
+select * From (
+select 
+category_name,
+model_year,
+product_id
+from 
+production.products p 
+inner join production.categories c
+on c.category_id = p.category_id) t
+PIVOT (
+count(product_id) 
+for category_name in (
+ [Children Bicycles], 
+        [Comfort Bicycles], 
+        [Cruisers Bicycles], 
+        [Cyclocross Bicycles], 
+        [Electric Bikes], 
+        [Mountain Bikes], 
+        [Road Bikes])
+) as pivot_table;
