@@ -79,3 +79,63 @@ IF @sales > 10000000
     END
     
     
+ ---> nested if else
+ 
+ 
+ While loop 
+ 
+ declare @name int = 1
+
+while @name <= 10 
+begin 
+print @name;
+set @name = @name + 1
+end;
+
+
+--->>>
+
+
+
+declare 
+@product_name varchar(max),
+@list_price decimal;
+
+declare cursor_product_new cursor
+for select 
+product_name,list_price
+from
+production.products;
+
+open cursor_product_new
+
+fetch next from cursor_product_new into
+@product_name,
+@list_price;
+
+while @@fetch_status = 0
+
+begin 
+print 'Product Name --' + @product_name +  ' List Price -- ' + cast(@list_price as varchar);
+fetch next from cursor_product_new into
+@product_name,@list_price;
+end;
+close cursor_product_new;
+deallocate cursor_product_new;
+
+Product Name --Trek 820 - 2016 List Price -- 380
+Product Name --Ritchey Timberwolf Frameset - 2016 List Price -- 750
+Product Name --Surly Wednesday Frameset - 2016 List Price -- 1000
+Product Name --Trek Fuel EX 8 29 - 2016 List Price -- 2900
+Product Name --Heller Shagamaw Frame - 2016 List Price -- 1321
+Product Name --Surly Ice Cream Truck Frameset - 2016 List Price -- 470
+Product Name --Trek Slash 8 27.5 - 2016 List Price -- 4000
+Product Name --Trek Remedy 29 Carbon Frameset - 2016 List Price -- 1800
+
+--->
+
+
+
+
+
+
