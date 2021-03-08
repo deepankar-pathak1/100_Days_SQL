@@ -262,3 +262,5 @@ EXEC uspGetProductList 2018
 --->>>
 
 
+In SQL Server, symbol @@ is prefixed to global variables. The server maintains all the global variables. ... Global variable names begin with a @@ prefix. 
+
