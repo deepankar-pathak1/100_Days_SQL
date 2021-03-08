@@ -1,0 +1,22 @@
+MERGE Statement
+
+link : https://www.sqlservertutorial.net/sql-server-basics/sql-server-merge/
+link  https://www.youtube.com/watch?v=5dk33HN8BX8&ab_channel=kudvenkat
+
+select * from sales.category;
+select * from sales.category_staging;
+
+merge sales.category t 
+using sales.category_staging s
+on (s.category_id = t.category_id)
+when matched 
+then update set 
+t.category_name = s.category_name,
+t.amount = s.amount 
+when not matched by target 
+then insert (category_id,category_name,amount)
+values (s.category_id,s.category_name,s.amount)
+when not matched by source 
+then delete;
+
+select * from sales.category;
