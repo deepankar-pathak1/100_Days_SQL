@@ -1,0 +1,41 @@
+select product_name,list_price
+from production.products
+order by product_name;
+
+Create Procedure uspProductList
+as
+begin 
+select 
+product_name,list_price
+from production.products
+order by product_name;
+end;
+
+
+execute uspProductList;
+
+
+---> To modify 
+
+USE [BikeStores]
+GO
+/****** Object:  StoredProcedure [dbo].[uspProductList]    Script Date: 08-03-2021 14:54:05 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER Procedure [dbo].[uspProductList]
+as
+begin 
+select 
+product_name,list_price
+from production.products
+order by product_name;
+end;
+
+
+-- > to drop procedure we use
+
+drop proc uspProductList;
+
+
