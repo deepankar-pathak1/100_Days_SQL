@@ -207,6 +207,35 @@ end;
 exec spSummariseEpisodes 
 
 
+**>> with limit 
+
+alter procedure  spSummariseEpisodes
+as begin 
+select top 3
+c.CompanionName,count(e.EpisodeNumber) Episodes
+from tblCompanion c
+inner join tblEpisodeCompanion ec
+on c.CompanionId = ec.CompanionId
+inner join tblEpisode e
+on e.EpisodeId = ec.EpisodeId
+group by c.CompanionName
+order by count(e.EpisodeNumber) DESC
+
+
+select top 3
+en.EnemyName,count(e.EpisodeNumber) Episodes
+from tblEpisodeEnemy ee
+inner join tblEpisode e
+on ee.EpisodeEnemyId = e.EpisodeId
+inner join tblEnemy en
+on en.EnemyId = ee.EnemyId
+group by en.EnemyName
+order by count(e.EpisodeNumber) DESC
+end;
+
+exec spSummariseEpisodes;
+
+
 
 
 --->>> 
