@@ -1,0 +1,227 @@
+Ref : https://www.wiseowl.co.uk/sql/exercises/standard/stored-procedures/4267/
+
+create proc uspCountriesEurope 
+as 
+select CountryName from tblCountry
+where ContinentID = 1
+order by CountryName
+
+exec uspCountriesEurope
+
+alter procedure uspCountriesEurope
+as 
+begin 
+select CountryName
+from tblCountry
+where ContinentID = 3
+order by CountryName
+end
+
+
+exec uspCountriesEurope
+
+
+
+----->>>
+
+
+alter procedure uspCountriesEurope
+as
+begin 
+select CountryId,CountryName
+from tblCountry
+where ContinentID = 3
+order by CountryName
+end
+
+
+exec uspCountriesEurope
+
+
+---->
+
+
+
+
+Ref : https://www.wiseowl.co.uk/sql/exercises/standard/stored-procedures/3966/
+
+
+select * from tblAuthor;
+
+select * from tblEpisode;
+
+
+create Proc spMoffats 
+as
+begin
+
+select distinct e.Title,e.EpisodeDate
+
+from tblEpisode e
+inner join tblAuthor a
+on e.AuthorId = a.AuthorId
+where a.AuthorId = 22
+order by e.EpisodeDate DESC
+end;
+
+exec spMoffats
+
+create proc spRussell
+as begin
+
+select e.Title,a.AuthorName,e.EpisodeDate
+
+from tblAuthor a
+inner join tblEpisode e
+on 
+a.AuthorId = e.AuthorId
+where a.AuthorId = 18
+order by e.EpisodeDate desc
+
+end
+
+exec spRussell
+
+
+
+---->
+
+
+
+Ref : https://www.wiseowl.co.uk/sql/exercises/standard/stored-procedures/3965/
+
+
+select * from tblAuthor;
+
+select * from tblEpisode;
+
+
+create Proc spMoffats 
+as
+begin
+
+select distinct e.Title,e.EpisodeDate
+
+from tblEpisode e
+inner join tblAuthor a
+on e.AuthorId = a.AuthorId
+where a.AuthorId = 22
+order by e.EpisodeDate DESC
+end;
+
+exec spMoffats
+
+create proc spRussell
+as begin
+
+select e.Title,a.AuthorName,e.EpisodeDate
+
+from tblAuthor a
+inner join tblEpisode e
+on 
+a.AuthorId = e.AuthorId
+where a.AuthorId = 18
+order by e.EpisodeDate desc
+
+end
+
+exec spRussell
+
+
+select * from tblDoctor
+select * from tblEpisode
+
+create proc spMattSmithEpisodes
+as
+begin 
+
+select e.SeriesNumber,e.Title,e.EpisodeType,e.EpisodeDate,d.DoctorName
+
+from tblDoctor d
+inner join tblEpisode e
+on d.DoctorId = e.DoctorId
+where d.DoctorId = 5
+
+end;
+
+exec spMattSmithEpisodes;
+
+
+alter procedure spMattSmithEpisodes
+as
+begin 
+
+select e.SeriesNumber,e.Title,e.EpisodeType,e.EpisodeDate,d.DoctorName
+
+ 
+from tblDoctor d
+inner join tblEpisode e
+on d.DoctorId = e.DoctorId
+where d.DoctorId = 5 and year(e.EpisodeDate) = 2012
+
+end;
+
+
+exec spMattSmithEpisodes;
+
+
+
+
+--->
+
+
+Ref: https://www.wiseowl.co.uk/sql/exercises/standard/stored-procedures/3967/
+
+select * from tblDoctor;
+select * from tblCompanion;
+select * from tblEpisodeCompanion;
+select * from tblEpisode;
+select * from tblEnemy;
+
+create proc spSummariseEpisodes 
+
+as 
+begin 
+select c.CompanionName,count(e.EpisodeNumber) Episodes
+from tblCompanion c
+inner join tblEpisodeCompanion ec
+on c.CompanionId = ec.CompanionId
+inner join tblEpisode e
+on e.EpisodeId = ec.EpisodeId
+group by c.CompanionName
+order by count(e.EpisodeNumber) DESC
+
+
+select en.EnemyName,count(e.EpisodeNumber) Episodes
+from tblEpisodeEnemy ee
+inner join tblEpisode e
+on ee.EpisodeEnemyId = e.EpisodeId
+inner join tblEnemy en
+on en.EnemyId = ee.EnemyId
+group by en.EnemyName
+order by count(e.EpisodeNumber) DESC
+
+end;
+
+
+exec spSummariseEpisodes 
+
+
+
+
+--->>> 
+
+Ref :- https://www.wiseowl.co.uk/sql/exercises/standard/stored-procedures/4198/
+
+select * from tblEvent
+
+create proc uspAugustEvents
+as 
+begin 
+select * from 
+tblEvent
+where MONTH(EventDate) = 8
+end;
+
+exec uspAugustEvents
+
