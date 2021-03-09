@@ -57,3 +57,39 @@ where LAT_N = (SELECT MAX(LAT_N) from STATION where LAT_N < 137.2345)
 --> 
 
 ---> 
+
+--> https://www.hackerrank.com/challenges/weather-observation-station-17/problem
+
+select round(LONG_W,4)
+from STATION 
+WHERE LAT_N in (select min(LAT_N) from STATION where LAT_N > 38.7780)
+
+
+select round(LONG_W,4) from STATION where LAT_N > 38.7780 order by LAT_N limit 1
+
+
+--->
+
+https://www.hackerrank.com/challenges/the-pads/problem
+
+
+SELECT concat(NAME,concat("(",concat(substr(OCCUPATION,1,1),")"))) FROM OCCUPATIONS ORDER BY NAME ASC;
+
+SELECT "There are a total of ", count(OCCUPATION), concat(lower(occupation),"s.") FROM OCCUPATIONS GROUP BY OCCUPATION ORDER BY count(OCCUPATION) ASC
+
+---->> 
+https://www.hackerrank.com/challenges/weather-observation-station-16/problem
+
+select round(LAT_N,4) from STATION where LAT_N in (select min(LAT_N) from STATION where LAT_N > 38.7780 );
+
+
+
+---> 
+https://www.hackerrank.com/challenges/asian-population/problem
+
+select sum(CITY.POPULATION)
+
+from CITY 
+inner join COUNTRY 
+on CITY.CountryCode = COUNTRY.Code
+where CONTINENT = 'Asia';
