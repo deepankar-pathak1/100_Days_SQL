@@ -12,3 +12,15 @@ select city,length(city)
 from STATION 
 order by length(city) DESC,city DESC
 limit 1;
+
+
+--> https://www.hackerrank.com/challenges/the-report/problem
+
+select 
+Case when G.Grade < 8 Then Null else S.Name END as Name,G.Grade,S.Marks
+
+from Students S
+Inner JOIN Grades G 
+ON S.Marks
+Between G.Min_Mark and G.Max_Mark
+ORDER BY G.Grade DESC,S.Name,S.Marks
