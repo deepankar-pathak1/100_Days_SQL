@@ -43,3 +43,16 @@ m.manager_code = e.manager_code
 
 group by c.company_code,c.founder
 order by c.company_code
+
+---> https://www.hackerrank.com/challenges/contest-leaderboard/problem
+
+select h.hacker_id,h.name,sum(score)
+from 
+(
+select hacker_id,challenge_id,Max(score) as Score from Submissions
+GROUP BY hacker_id,challenge_id)t
+JOIN Hackers h 
+on t.hacker_id = h.hacker_id
+Group by h.hacker_id,h.name
+having sum(score) > 0
+order by sum(score) desc, h.hacker_id
