@@ -1,0 +1,66 @@
+select * from tblEmployee;
+select * from tblDepartment;
+
+select e.[Name],e.Gender,e.Salary,d.DepartmentName
+from tblEmployee e
+left join tblDepartment d
+on d.ID = e.DepartmentId
+where e.DepartmentID is null;
+
+
+select e.[Name],e.Gender,e.Salary,d.DepartmentName
+from tblEmployee e
+right join tblDepartment d
+on d.ID = e.DepartmentId
+where e.DepartmentID is null;
+
+select e.[Name],e.Gender,e.Salary,d.DepartmentName
+from tblEmployee e
+full outer join   tblDepartment d
+on d.ID = e.DepartmentId
+where e.DepartmentID is null;
+
+
+
+--> 
+
+create table newtable(
+Id int Primary key,
+FirstName varchar(50),
+MiddleName varchar(50),
+LastName varchar(50)
+)
+select * from newtable;
+
+truncate table newtable;
+insert into newtable values('2',NULL,'Todd','Tanzan')
+
+select   Id,Coalesce(FirstName,MiddleName,LastName) as [Name]
+from     newtable
+
+
+with help of coalesce we can extract :- only value which is not null in sequence via sequence 
+from FirstName,MiddleName,LastName
+
+
+
+--> Stored Procedure 
+
+
+select * from tblPerson
+
+create Proc PersonbyNameAge
+@Name nvarchar(50),
+@Age int
+
+as Begin 
+select [Name],Age from tblPerson where [Name] = @Name and
+Age = @Age
+
+end
+
+exec PersonbyNameAge 'Mara',13
+
+exec PersonbyNameAge @Name = 'Mara',@age=13;
+
+sp_helptext PersonbyNameAge
