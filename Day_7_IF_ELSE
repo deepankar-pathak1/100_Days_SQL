@@ -1,0 +1,38 @@
+declare @RomanticFilms int 
+declare @ActionFilms int 
+
+set @RomanticFilms = (select count(*) from tblFilm where FilmGenreID = 3)
+set @ActionFilms = (select count(*) from tblFilm where FilmGenreID = 1)
+
+if @RomanticFilms > 0
+	Begin 
+	print 'Warning'
+	print 'There are many'
+	if @ActionFilms > 10
+		begin
+		print 'There are not enough action fims'
+		end
+	end
+else
+	Begin 
+	print 'Information'
+	print 'There are no more than five romantic films'
+	end
+
+--if we want to use stored procedure with if else
+
+use movies
+go
+
+proc spVariableData
+(
+@Infotype varchar(9)
+)
+as 
+begin
+	if @infotype = 'ALL'
+		begin 
+			(select * from tblFilm)
+			return 
+		end
+end
