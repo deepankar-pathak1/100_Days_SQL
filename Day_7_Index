@@ -10,3 +10,6 @@ sp_Helpindex tblPerson
 
 -->>  to drop Index 
 drop index tblPerson.IX_tblPerson_Age
+
+
+--> Clustered Index :- By Default Clustered Index is created if you have primary key 
