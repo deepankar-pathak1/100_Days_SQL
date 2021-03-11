@@ -1,0 +1,12 @@
+Ref : - https://www.youtube.com/watch?app=desktop&v=i_FwqzYMUvk&list=PL08903FB7ACA1C2FB&index=35&ab_channel=kudvenkat
+
+create index IX_tblPerson_Age
+on tblPerson (Age ASC)
+
+__> to check how many index you have for particular table 
+
+sp_Helpindex tblPerson
+
+
+-->>  to drop Index 
+drop index tblPerson.IX_tblPerson_Age
