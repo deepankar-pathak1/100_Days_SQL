@@ -1,0 +1,13 @@
+select * from tblPerson
+select  * from tblGender
+
+
+insert into tblPerson (ID,[Name],Email) values (3,'Mike','m@e.com')
+
+alter table tblPerson 
+add constraint DF_tblPerson_GenderId
+DEFAULT 2 for GenderID
+
+
+alter table tblPerson
+drop constraint DF_tblPerson_GenderId
