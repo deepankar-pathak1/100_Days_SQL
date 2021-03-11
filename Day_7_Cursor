@@ -1,0 +1,9 @@
+cursor holds multiple rows returned by a sql statemnet 
+
+1) implicir cursor 
+2) explicit cursor
+
+declare > opne > fetch > close
+
+-> Cursor will loop thru each row in table or we can say that cursor is a pointer to a row
+ref : - https://csharp-video-tutorials.blogspot.com/2013/01/cursors-in-sql-server-part-63.html
