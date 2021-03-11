@@ -1,0 +1,33 @@
+Three types 
+Scalar function : inbuilt function -- have one or more parametrs but always return a single value 
+
+It can return any data type except text,ntext,image,cursor and timestamp
+
+
+inline function : 
+
+multi-statement table-valued function :
+
+
+Scalar Function : 
+
+CREATE FUNCTION CalculateAge(@DOB Date)
+returns int
+
+as
+begin 
+
+
+
+DECLARE @Age Int
+
+set @DOB = '11/08/2011'
+
+set @Age = DATEDIFF(YEAR, @DOB, GETDATE())
+
+return @Age
+end
+
+select dbo.CalculateAge('10/08/1982') as Age
+
+we get : 10 as we are in 2021 
