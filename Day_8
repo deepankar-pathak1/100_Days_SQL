@@ -1,0 +1,14 @@
+__> Occupations
+
+https://www.hackerrank.com/challenges/occupations/problem
+
+select Doctor, Professor, Singer,Actor
+from 
+(select Name,Occupation,
+ROW_NUMBER() OVER (Partition by Occupation order by Name)as column_sequence
+from Occupations)Temp
+PIVOT
+(
+ Max(Name)
+    for Occupation in (Doctor,Professor,Singer,Actor)
+)as Piv
