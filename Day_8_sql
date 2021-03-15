@@ -1,0 +1,232 @@
+select * from sales.orders;
+
+
+select * from sales.orders
+order by order_id
+offset 0 rows fetch next 20 rows only
+
+
+
+create PROC SPGET
+DECLARE @PageNumber AS INT
+DECLARE @RowsOfPage AS INT
+SET @PageNumber=1
+SET @RowsOfPage=20
+SELECT * FROM sales.orders
+ORDER BY order_id 
+OFFSET (@PageNumber-1)*@RowsOfPage ROWS
+FETCH NEXT @RowsOfPage ROWS ONLY
+
+
+
+
+create PROC SPGET
+@PageNumber AS INT,
+@RowsOfPage AS INT
+as
+begin 
+
+
+SELECT * FROM sales.orders
+ORDER BY order_id 
+OFFSET (@PageNumber-1)*@RowsOfPage ROWS
+FETCH NEXT @RowsOfPage ROWS ONLY
+
+
+end
+
+exec SPGET 18,20
+
+
+
+create PROC SPGET
+@PageNumber AS INT,
+@RowsOfPage AS INT
+as
+
+
+begin 
+
+
+SELECT * FROM sales.orders
+ORDER BY order_id 
+OFFSET (@PageNumber-1)*@RowsOfPage ROWS
+FETCH NEXT @RowsOfPage ROWS ONLY
+
+
+end
+
+exec SPGET 81,20
+
+select count(order_id) from sales.orders
+
+
+create proc spGEt
+declare @PageNumber int ,
+declare @PageSize int
+as 
+begin 
+select order_id
+from sales.orders
+offset (@PageNumber-1)*PageSize ROWS
+FETCH NEXT @PageSize ROWS ONLY
+END
+
+
+
+
+DECLARE @PageNumber AS INT
+DECLARE @RowsOfPage AS INT
+
+SET @PageNumber=1
+SET @RowsOfPage=20
+
+select *,
+       row_number() over(
+	   order by [order_id]
+	   ) as row_num
+	   from sales.orders
+	   ORDER BY order_id 
+	OFFSET (@PageNumber-1)*@RowsOfPage ROWS
+	FETCH NEXT @RowsOfPage ROWS ONLY
+
+	if (@PageNumber-1)*@RowsOfPage > count(row_num)
+		begin 
+		print 'cannot print'
+
+select count(*) from sales.orders
+
+DECLARE @PageNumber AS INT
+DECLARE @RowsOfPage AS INT
+
+SET @PageNumber=1
+SET @RowsOfPage=20
+
+with old_cte
+as
+(
+select *,
+       row_number() over(
+	   order by [order_id]
+	   ) as row_num
+	   from sales.orders
+	   ORDER BY order_id 
+	OFFSET (@PageNumber-1)*@RowsOfPage ROWS
+	FETCH NEXT @RowsOfPage ROWS ONLY
+),
+new_cte
+as
+(
+select count(row_num) from old_cte
+)
+
+
+
+
+
+
+create PROC SPGET
+@PageNumber AS INT,
+@RowsOfPage AS INT
+as
+
+
+begin 
+
+
+SELECT * FROM sales.orders
+ORDER BY order_id 
+OFFSET (@PageNumber-1)*@RowsOfPage ROWS
+FETCH NEXT @RowsOfPage ROWS ONLY
+
+
+end
+
+exec SPGET 81,20
+
+
+select 
+ count(order_id) as row_num 
+
+from sales.orders
+
+
+
+
+create PROC SPGET
+@PageNumber AS INT,
+@RowsOfPage AS INT
+as
+begin 
+
+
+SELECT * FROM sales.orders
+ORDER BY order_id 
+OFFSET (@PageNumber-1)*@RowsOfPage ROWS
+FETCH NEXT @RowsOfPage ROWS ONLY
+
+
+end
+
+exec SPGET 18,20
+
+
+DECLARE @PageNumber AS INT
+DECLARE @RowsOfPage AS INT
+
+SET @PageNumber=1
+SET @RowsOfPage=20
+
+declare @Row_num int
+set @Row_num = (select count(order_id) from sales.orders)
+-- print @Row_num
+
+if @PageNumber < @Row_num
+print 'Limit beyond the Range'
+else
+
+SELECT * FROM sales.orders
+ORDER BY order_id 
+OFFSET (@PageNumber-1)*@RowsOfPage ROWS
+FETCH NEXT @RowsOfPage ROWS ONLY
+
+
+
+
+
+
+____>>>---
+
+
+
+
+alter PROC SPNEW
+@PageNumber AS INT,
+@RowsOfPage AS INT
+as
+begin 
+
+declare @Row_num int
+set @Row_num = (select count(order_id)/20 from sales.orders)
+ print @Row_num
+
+if @PageNumber > ceiling(@Row_num)
+print 'Limit beyond the Range'
+
+else
+
+SELECT * FROM sales.orders
+ORDER BY order_id 
+OFFSET (@PageNumber-1)*@RowsOfPage ROWS
+FETCH NEXT @RowsOfPage ROWS ONLY
+
+end
+
+
+exec SPNEW 81,20
+
+select ceiling(51.12)
+
+
+
+-___>>>--
