@@ -1,0 +1,38 @@
+select top 10 * from [STG].[ZEFLMI_SPARE_REQ]
+order by MANDT
+
+
+with t_cte
+as
+(
+select top 100 MANDT,BP_NO,SERVICE_NO, count(SPARE) as SPARE_COUNT
+from 
+[STG].[ZEFLMI_SPARE_REQ]
+where SPARE in
+(Select distinct SPARE 
+from [STG].[ZEFLMI_SPARE_REQ])
+
+group by MANDT,BP_NO,SERVICE_NO
+order by MANDT
+)
+
+select * from
+[STG].[ZEFLMI_SPARE_REQ]
+where bp_no = '11458' and service_no ='9988984266'
+
+
+select  BP_NO,SERVICE_NO,SPare, count(SPARE) as SPARE_COUNT
+from 
+[STG].[ZEFLMI_SPARE_REQ]
+where bp_no = '11458' and service_no ='9988984266'
+group by MANDT,BP_NO,SERVICE_NO,SPARE
+order by MANDT
+
+9988984266
+
+
+select top 10 MANDT,BP_NO,SERVICE_NO,AMC_STATUS,count(SPARE)
+from
+[STG].[ZEFLMI_SPARE_REQ]
+group by MANDT,BP_NO,SERVICE_NO,AMC_STATUS
+order by MANDT
