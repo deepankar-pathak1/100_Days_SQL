@@ -1,0 +1,11 @@
+create table new_table (PersonId int,
+numbers int )
+
+select * from new_table
+
+insert into new_table (PersonId,numbers) values (2,2)
+insert into new_table (PersonId,numbers) values (3,3)
+insert into new_table (PersonId,numbers) values (4,1)
+insert into new_table (PersonId,numbers) values (5,2)
+insert into new_table (PersonId,numbers) values (6,3)
+insert into new_table (PersonId,numbers) values (7,1)
