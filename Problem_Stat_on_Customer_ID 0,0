@@ -1,0 +1,33 @@
+create table new_tab (PersonId int,
+numbers int )
+
+select * from new_tab
+
+insert into new_tab (PersonId,numbers) values (1,1)
+insert into new_tab (PersonId,numbers) values (2,2)
+insert into new_tab (PersonId,numbers) values (3,3)
+insert into new_tab (PersonId,numbers) values (4,3)
+insert into new_tab (PersonId,numbers) values (4,3)
+insert into new_tab (PersonId,numbers) values (5,4)
+
+insert into new_tab (PersonId,numbers) values (6,5)
+insert into new_tab (PersonId,numbers) values (7,5)
+insert into new_tab (PersonId,numbers) values (8,6)
+insert into new_tab (PersonId,numbers) values (9,7)
+insert into new_tab (PersonId,numbers) values (10,8)
+insert into new_tab (PersonId,numbers) values (11,8)
+
+
+with row_count as
+(
+SELECT 
+  ROW_NUMBER() OVER(PARTITION BY numbers ORDER BY numbers ASC) 
+    AS Row_count,numbers
+
+FROM  new_tab
+)
+select 
+case when row_count = 1 then 1 else 0 end as count_number,row_count
+from row_count
+
+select * from new_tab
