@@ -1,0 +1,168 @@
+Split Delimited String into Columns in SQL Server with PARSENAME
+
+
+--> https://www.mssqltips.com/sqlservertip/6321/split-delimited-string-into-columns-in-sql-server-with-parsename/
+
+
+CREATE FUNCTION split_string
+(
+    @in_string VARCHAR(MAX),
+    @delimeter VARCHAR(1)
+)
+RETURNS @list TABLE(tuple VARCHAR(100))
+AS
+BEGIN
+        WHILE LEN(@in_string) > 0
+        BEGIN
+            INSERT INTO @list(tuple)
+            SELECT left(@in_string, charindex(@delimeter, @in_string+',') -1) as tuple
+    
+            SET @in_string = stuff(@in_string, 1, charindex(@delimeter, @in_string + @delimeter), '')
+        end
+    RETURN 
+END
+
+
+SELECT * FROM split_string('1001,1002,1003,1004', ',')
+
+
+
+
+CREATE FUNCTION split_strings_check
+(
+    @in_string VARCHAR(MAX),
+    @delimeter VARCHAR(1)
+)
+RETURNS @list TABLE(tuple VARCHAR(100))
+AS
+BEGIN
+        WHILE LEN(@in_string) > 0
+        BEGIN
+            INSERT INTO @list(tuple)
+            SELECT left(@in_string, charindex(@delimeter, @in_string+'|') -1) as tuple
+    
+            SET @in_string = stuff(@in_string, 1, charindex(@delimeter, @in_string + @delimeter), '')
+        end
+    RETURN 
+END
+
+with names_as
+as
+(
+SELECT * FROM split_strings_check('NAME|THIS|JAIPUR|RAJSATHAN', '|')
+)
+
+
+
+
+
+CREATE TABLE dbo.lets(
+     colID INT IDENTITY PRIMARY KEY
+   , myAddress VARCHAR(200)
+   );
+GO
+
+INSERT INTO dbo.lets(myAddress)
+VALUES('13B|NAME|JAIPUR|RAJSATHAN')
+    , ('14B|NAME|JAIPUR|RAJSATHAN')
+    , ('15B|NAME|JAIPUR|RAJSATHAN')
+    , ('16B|NAME|JAIPUR|RAJSATHAN')
+GO
+
+
+select * from dbo.lets
+
+
+SELECT 
+     REVERSE(PARSENAME(REPLACE(REVERSE(myAddress), '|', '.'), 1)) AS [Street]
+   , REVERSE(PARSENAME(REPLACE(REVERSE(myAddress), '|', '.'), 2)) AS [City]
+   , REVERSE(PARSENAME(REPLACE(REVERSE(myAddress), '|', '.'), 3)) AS [State]
+   , REVERSE(PARSENAME(REPLACE(REVERSE(myAddress), '|', '.'), 4))
+FROM dbo.lets;
+GO
+
+
+
+
+
+
+create procedure names
+as
+
+
+declare @Counting int
+Declare @string varchar(1000)
+Set @string = '13B|NAME|JAIPUR|RAJSATHAN'
+set @Counting = len(@string) - len(replace(@string, '|', ''))
+print @Counting
+
+
+BEGIN
+        WHILE @Counting >= 0
+        BEGIN
+
+           select  REVERSE(PARSENAME(REPLACE(REVERSE(@string), '|', '.'), @Counting)) as [Details]
+				set @Counting = @Counting - 1
+        end
+    RETURN					
+END
+
+
+exec names
+
+create table #Tem
+(
+    
+	Details varchar(200)
+   
+)
+INSERT INTO #Tem EXEC names
+
+
+select * from #Tem
+
+
+select * from (
+
+select [Details]
+from #Tem
+) y
+pivot(
+min([Details])
+for [Details]
+IN(
+[x],
+[y],
+[z],
+[r]
+)
+)as PivotTable
+
+
+
+
+
+declare @names varchar(2000)
+declare @Countings int
+Declare @strings varchar(1000)
+Set @strings = '13B|NAME|JAIPUR|RAJSATHAN'
+set @Countings = len(@strings) - len(replace(@strings, '|', '')) + 1
+--print @Countings
+
+
+BEGIN
+        WHILE @Countings > 0
+        BEGIN
+
+           set @names = REVERSE(PARSENAME(REPLACE(REVERSE(@strings), '|', '.'), @Countings))
+		   --print @countings
+		  print @names
+		  select @names 
+		  
+				set @Countings = @Countings - 1
+        end
+    RETURN					
+END
+
+
+exec names
