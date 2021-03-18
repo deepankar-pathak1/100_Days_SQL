@@ -1,0 +1,43 @@
+
+--->
+
+
+create table Region (address nvarchar(2000))
+insert into Region values('33|officers campus|Khatipura')
+insert into Region values('67 Malviya Nagar|Sodala')
+
+ 
+
+Declare @flag int , @max int, @counter int, @finalquery nvarchar(4000),@query nvarchar(4000)=' ',@columnname nvarchar(200)='Address';
+set @flag=(select max(len(address) - len(replace(address, '|', '')))+1 from Region) ;
+set @max=@flag;
+
+ 
+
+while(@flag<>0)
+Begin
+set @counter= (@max - @flag) +1
+set @query = @query + ('PARSENAME(REPLACE(address, '+'''|'''+','+ '''.''' +'), '+cast(@flag as varchar)+') ' +'AS '+@columnname +cast(@counter as varchar) + ' , ');
+set @flag=@flag-1;
+
+ 
+
+END
+
+ 
+
+set @query = (SUBSTRING(@query,1,len(@query) -2 ));
+print @query
+set @finalquery= ('select ' + @query + ' from Region');
+print @finalquery;
+
+ 
+
+ 
+
+ 
+
+exec (@finalquery);
+
+
+--> 
