@@ -1,4 +1,11 @@
+PARSENAME('NameOfStringToParse',PartIndex)
 
+
+SELECT PARSENAME('ServerName.DatabaseName.SchemaName.ObjectName',1)  // returns `ObjectName`
+SELECT PARSENAME('[1012-1111].SchoolDatabase.school.Student',1)     // returns `Student`
+
+SELECT PARSENAME('ServerName.DatabaseName.SchemaName.ObjectName',3) // returns `DatabaseName`
+SELECT PARSENAME('[1012-1111].SchoolDatabase.school.Student',3)    // returns `SchoolDatabase`
 --->
 
 
