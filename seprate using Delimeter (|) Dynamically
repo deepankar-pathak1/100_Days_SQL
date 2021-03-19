@@ -6,6 +6,21 @@ SELECT PARSENAME('[1012-1111].SchoolDatabase.school.Student',1)     // returns `
 
 SELECT PARSENAME('ServerName.DatabaseName.SchemaName.ObjectName',3) // returns `DatabaseName`
 SELECT PARSENAME('[1012-1111].SchoolDatabase.school.Student',3)    // returns `SchoolDatabase`
+
+--->
+------------  
+
+SELECT REPLACE('abcdefghicde','cde','xxx');  
+GO
+
+
+abxxxfghixxx  
+(1 row(s) affected)
+
+
+
+
+--->
 --->
 
 
