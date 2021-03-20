@@ -1,0 +1,52 @@
+select * from Phone_aggregate
+
+create table lookup_tbl(Itemcode int,
+						ItemDesc varchar(200))
+
+insert into lookup_tbl (Itemcode,ItemDesc) values (1,'ACDA')
+insert into lookup_tbl (Itemcode,ItemDesc) values (2,'BDEB')
+insert into lookup_tbl (Itemcode,ItemDesc) values (3,'CEFC')
+insert into lookup_tbl (Itemcode,ItemDesc) values (4,'DFGD')
+insert into lookup_tbl (Itemcode,ItemDesc) values (5,'EGHE')
+
+select * from lookup_tbl
+
+create table item_sales(Itemcode int,
+						Qty int,
+						value varchar(200),
+						SPName varchar(200))
+
+select * from item_sales
+
+
+
+create table fuzzy_Lookup(Itemcode int,
+						Occupation varchar(200))
+
+insert into fuzzy_Lookup (Itemcode,Occupation)values (1,'Customer Service Representative')
+insert into fuzzy_Lookup (Itemcode,Occupation)values (1,'Tech Lead')
+insert into fuzzy_Lookup (Itemcode,Occupation)values (1,'Senior Manager')
+
+select * from fuzzy_Lookup
+
+create table OLEDB_Command_source(Id int,
+						[Name] varchar(200))
+
+insert into OLEDB_Command_source (Id,[Name]) values(1,'Arpit')
+insert into OLEDB_Command_source (Id,[Name]) values(2,'BArpit')
+insert into OLEDB_Command_source (Id,[Name]) values(3,'Trpit')
+insert into OLEDB_Command_source (Id,[Name]) values(4,'Nrpit')
+
+select * from OLEDB_Command_source
+
+create table OLEDB_Command_Destination(Id int,
+						[Name] varchar(200))
+
+select * from OLEDB_Command_Destination
+
+
+create table FF_TO_DB(Id int,
+						[Name] varchar(200),
+						salary int)
+
+select * from FF_TO_DB
