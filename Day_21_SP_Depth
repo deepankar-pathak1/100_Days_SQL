@@ -6,7 +6,7 @@ converting the nvarchar value 'sam' to datatype int.
 it will show this because whenver you execude stored procedure it return an integr variable
 usually zero indicated success and non-zero indicate failure
 
-
+-*- stored procedure always return integer value so keep in mind whene we deal with the return statement in 'SP' it will always return a integer value 
 
 -->
 
