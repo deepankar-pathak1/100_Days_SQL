@@ -1,0 +1,13 @@
+select * from [dbo].[DimEmployee]
+
+alter proc spgetNamebyID
+@Id int,
+@Name nvarchar(200) output
+as 
+begin 
+select @Name = FirstName from [dbo].[DimEmployee] where EmployeeKey = @Id
+end
+
+declare @Name nvarchar(20)
+execute spgetNamebyID 1, @Name out
+Print 'Name = ' + @Name
