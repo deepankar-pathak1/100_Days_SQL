@@ -1,3 +1,16 @@
+when we execute this stored procedure by return statemnet it will show error as conversion is failed when 
+converting the nvarchar value 'sam' to datatype int.
+
+
+--->
+it will show this because whenver you execude stored procedure it return an integr variable
+usually zero indicated success and non-zero indicate failure
+
+
+
+-->
+
+
 select * from [dbo].[DimEmployee]
 
 alter proc spgetNamebyID
