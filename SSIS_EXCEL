@@ -1,3 +1,23 @@
 Whenever you get Error in loading excel in SSIS then you can follow this link 
 
 https://mariussqlbi.wordpress.com/2013/09/06/extracting-data-from-excel-with-ssis/
+
+
+
+___>
+
+CREATE TABLE Student_1 (
+  Id int,
+    Name varchar(255),
+    DOB datetime,
+    Number bigint,
+ 
+);
+
+
+ALTER TABLE Student_1 
+ALTER COLUMN Name nvarchar(255)
+
+select * from Student_1
+
+TRUNCATE TABLE student_1
