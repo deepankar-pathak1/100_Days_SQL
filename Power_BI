@@ -1,0 +1,8 @@
+-->
+
+To FInd Name of Days 
+
+Day Name = FORMAT([Date],"dddd")
+
+-->
+
