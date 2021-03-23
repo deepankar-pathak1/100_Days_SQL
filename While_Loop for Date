@@ -1,0 +1,20 @@
+-->
+
+
+DECLARE @StartDate DATE = '2016-10-01';
+DECLARE @EndDate DATE = '2016-10-31';
+
+WHILE (@StartDate <= @EndDate)
+
+BEGIN
+
+print try_cast(year(@StartDate) as varchar) + '-' + try_cast(month(@StartDate) as varchar)
+
+set @StartDate = DATEADD(day, 1, @StartDate);
+
+END
+
+-->
+
+
+
