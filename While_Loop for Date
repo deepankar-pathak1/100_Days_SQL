@@ -18,3 +18,141 @@ END
 
 
 
+CREATE TABLE Student_1 (
+  Id int,
+    Name varchar(255),
+    DOB datetime,
+    Number bigint,
+ 
+);
+
+
+ALTER TABLE Student_1 
+ALTER COLUMN Name nvarchar(255)
+
+select * from Student_1
+
+TRUNCATE TABLE student_1
+
+
+
+CREATE TABLE attendence_monitor (
+  Id int,
+    Date date,
+    Attendence int,
+);
+
+select * from attendence_monitor
+
+CREATE TABLE attendence_calculate (
+Id int,
+Starting_Date date,
+   End_Date date,
+    Attendence_Count int,
+);
+select * from attendence_monitor
+
+
+
+select * from Student_1
+select * from attendence_calculate 
+
+
+ CREATE TABLE DATESOFYEAR
+ (
+ MyName varchar(15),
+ MyDate date
+ );
+
+ select * from DATESOFYEAR
+
+ DECLARE @StartDate date, @EndDate Date;
+SELECT @StartDate = '20171231', @EndDate = '20181231';
+
+while @StartDate <= @EndDate
+begin 
+as
+
+
+SELECT cast(YEAR( @StartDate) as varchar) + '-' + cast(Month( @StartDate) as varchar)
+
+@startDate 
+
+end
+WITH Dates AS(
+    SELECT @StartDate AS MyDate
+    UNION ALL
+    SELECT cast(YEAR( @StartDate) as varchar) + '-' + cast(Month( @StartDate) as varchar)
+    FROM Dates
+    WHERE DATEADD(Month, 1,MyDate) <= @EndDate)
+SELECT *
+FROM Dates
+OPTION (MAXRECURSION 366);
+
+select month(dateField), year(dateField)
+
+
+
+SELECT DATEADD(MONTH, DATEDIFF(MONTH, 0, '20181231'), 0) 
+
+truncate table DATESOFYEAR
+
+
+
+
+create procedure datedatan
+
+@Start date,
+@End date
+
+as
+
+WITH Dates AS(
+    SELECT @Start AS MyDate
+    UNION ALL
+    SELECT DATEADD(DAY, 1,MyDate)
+    FROM Dates
+    WHERE DATEADD(DAY, 1,MyDate) <= @End)
+SELECT *
+FROM Dates
+OPTION (MAXRECURSION 366)
+
+exec datedatan '20170101','20171231'
+
+
+
+
+create procedure year_month
+
+@Start date,
+@End date
+
+as
+
+WITH Dates AS(
+    SELECT @Start AS MyDate
+    UNION ALL
+    SELECT month(MyDate), year(dateField)
+    FROM Dates
+    WHERE DATEADD(DAY, 1,MyDate) <= @End)
+SELECT *
+FROM Dates
+OPTION (MAXRECURSION 366)
+
+exec datedatan '20170101','20171231'
+
+
+
+
+DECLARE @StartDate DATE = '2016-10-01';
+DECLARE @EndDate DATE = '2016-10-31';
+
+WHILE (@StartDate <= @EndDate)
+
+BEGIN
+
+print try_cast(year(@StartDate) as varchar) + '-' + try_cast(month(@StartDate) as varchar)
+
+set @StartDate = DATEADD(day, 1, @StartDate);
+
+END
