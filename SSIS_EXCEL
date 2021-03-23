@@ -21,3 +21,11 @@ ALTER COLUMN Name nvarchar(255)
 select * from Student_1
 
 TRUNCATE TABLE student_1
+
+
+---->>
+
+SELECT s1.Id, MIN(a.[Date]) AS Starting_Date, MAX(a.[Date]) AS End_Date, SUM(a.Attendence) AS Attendence_Count
+FROM     Student_1 AS s1 FULL OUTER JOIN
+                  attendence_monitor AS a ON s1.Id = a.Id
+GROUP BY s1.Id
