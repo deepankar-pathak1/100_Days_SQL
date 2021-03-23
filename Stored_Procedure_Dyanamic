@@ -1,0 +1,46 @@
+
+ CREATE TABLE DATESOFYEAR
+ (
+ MyName varchar(15),
+ MyDate date
+ );
+
+ select * from DATESOFYEAR
+
+ DECLARE @StartDate date, @EndDate Date;
+SELECT @StartDate = '20170101', @EndDate = '20171231';
+
+WITH Dates AS(
+    SELECT @StartDate AS MyDate
+    UNION ALL
+    SELECT DATEADD(DAY, 1,MyDate)
+    FROM Dates
+    WHERE DATEADD(DAY, 1,MyDate) <= @EndDate)
+SELECT *
+FROM Dates
+OPTION (MAXRECURSION 366);
+
+truncate table DATESOFYEAR
+
+
+---> STored Procedure Data
+
+
+create procedure datedatan
+
+@Start date,
+@End date
+
+as
+
+WITH Dates AS(
+    SELECT @Start AS MyDate
+    UNION ALL
+    SELECT DATEADD(DAY, 1,MyDate)
+    FROM Dates
+    WHERE DATEADD(DAY, 1,MyDate) <= @End)
+SELECT *
+FROM Dates
+OPTION (MAXRECURSION 366)
+
+exec datedatan '20170101','20171231'
