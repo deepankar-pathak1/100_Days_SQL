@@ -1,0 +1,74 @@
+CREATE TABLE Table5(
+    ID int,
+    Division varchar(255),
+  
+); 
+
+CREATE TABLE Table6(
+    ID int,
+    Division varchar(255),
+  
+);
+
+select * from Table5
+insert into Table5(ID,Division) values (1,'EX')
+insert into Table5(ID,Division) values (1,'SF')
+insert into Table5(ID,Division) values (1,'EX')
+insert into Table5(ID,Division) values (2,'SF')
+insert into Table5(ID,Division) values (3,'EX')
+insert into Table5(ID,Division) values (3,'SF')
+insert into Table5(ID,Division) values (4,'EX')
+insert into Table5(ID,Division) values (5,'EX')
+insert into Table5(ID,Division) values (5,'EX')
+
+insert into Table6(ID,Division) values (1,'EX')
+insert into Table6(ID,Division) values (2,'SF')
+insert into Table6(ID,Division) values (3,'SF')
+insert into Table6(ID,Division) values (4,NULL)
+insert into Table6(ID,Division) values (5,'EX')
+
+
+select * from Table5
+select * from Table6
+
+with row_5
+as(
+select 
+ID,Division,
+Row_Number() over(order by ID) RowNumber1 
+from table5
+),
+row_6 as(
+select 
+ID,Division,
+Row_Number() over(order by ID) RowNumber 
+from table6
+)
+select * from row_5
+
+
+select 
+ID,Division,
+Row_Number() over(order by ID) RowNumber1 
+from table5
+
+
+
+with cte as (
+select t5.ID,t5.Division,
+
+case 
+when t5.Division = t6.Division and t5.ID = t6.ID then t5.Division
+when (t6.Division is null and t5.Division is not null) then t5.Division 
+
+
+end as result
+from table5 t5
+right join table6 t6
+on t5.ID = t6.ID)
+select distinct Id,Division from cte
+where result is not null
+
+
+select * from Table5
+select * from Table6
