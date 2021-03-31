@@ -1,0 +1,172 @@
+--=============================================================================
+-- Code Sample 1 
+--=============================================================================
+-- Create the staging table for the type two slowly changing dimension table data
+create table dbo.tblStaging
+(
+  SourceSystemID int not null,
+  [Name] varchar(128) not null 
+    constraint DF_tblStaging_Attribute1 default 'N/A',
+  [Department] varchar(128) not null 
+    constraint DF_tblStaging_Attribute2 default 'N/A',
+
+  DimensionCheckSum int not null 
+    constraint DF_tblStaging_DimensionCheckSum default -1,
+  LastUpdated datetime  not null 
+    constraint DF_tblStaging_LastUpdated default getdate(),
+)
+
+select * from dbo.tblStaging
+
+
+-- Create the type two slowly changing dimension table
+create table dbo.tblDimSCDType2Example
+(
+  SurrogateKey int not null identity(1,1) PRIMARY KEY,
+  SourceSystemID int not null,
+  [Name] varchar(128) not null 
+    constraint DF_tblDimSCDType2Example_Attribute1 default 'N/A',
+  [Department] varchar(128) not null 
+    constraint DF_tblDimSCDType2Example_Attribute2 default 'N/A',
+
+  DimensionCheckSum int not null 
+    constraint DF_tblDimSCDType2Example_DimensionCheckSum default -1,
+  EffectiveDate date not null 
+    constraint DF_tblDimSCDType2Example_EffectiveDate default getdate(),
+  EndDate date not null 
+    constraint DF_tblDimSCDType2Example_EndDate default '12/31/9999',
+  CurrentRecord char(1) not null 
+    constraint DF_tblDimSCDType2Example_CurrentRecord default 'Y'
+)
+
+
+select * from dbo.tblStaging
+
+select * from  dbo.tblDimSCDType2Example
+
+
+--Code Sample 2
+--=============================================================================
+-- Start of Day 1 - truncate the staging table
+truncate table dbo.tblStaging
+-- insert a new record into the staging table into the staging table
+insert into dbo.tblStaging
+(SourceSystemID, [Name],   [Department])
+values (1      , 'Mary Brown', 'Single')
+-- insert a new record into the staging table into the staging table
+insert into dbo.tblStaging
+(SourceSystemID, [Name],  [Department])
+values (2      , 'Ricky Green', 'Married')
+-- Update the checksum value in the staging table
+update dbo.tblStaging set DimensionCheckSum=
+BINARY_CHECKSUM(SourceSystemID, [Name],  [Department])
+
+
+
+select * from dbo.tblStaging
+select * from  dbo.tblDimSCDType2Example
+
+
+
+--=============================================================================
+-- Code Sample 3
+--=============================================================================
+-- begin of insert using merge
+insert into dbo.tblDimSCDType2Example
+( --Table and columns in which to insert the data
+  SourceSystemID,
+  [Name],
+  [Department],
+  
+  DimensionCheckSum,
+  EffectiveDate,
+  EndDate
+)
+-- Select the rows/columns to insert that are output from this merge statement 
+-- In this example, the rows to be inserted are the rows that have changed (UPDATE).
+select    
+  SourceSystemID,
+  [Name],
+  [Department],
+  
+  DimensionCheckSum,
+  EffectiveDate,
+  EndDate
+from
+(
+  -- This is the beginning of the merge statement.
+  -- The target must be defined, in this example it is our slowly changing
+  -- dimension table
+  MERGE into dbo.tblDimSCDType2Example AS target
+  -- The source must be defined with the USING clause
+  USING 
+  (
+    -- The source is made up of the attribute columns from the staging table.
+    SELECT 
+    SourceSystemID,
+  [Name],
+  [Department],
+    DimensionCheckSum
+    from dbo.tblStaging
+  ) AS source
+  ( 
+    SourceSystemID,
+  [Name],
+  [Department],
+  
+  DimensionCheckSum
+  ) ON --We are matching on the SourceSystemID in the target table and the source table.
+  (
+    target.SourceSystemID = source.SourceSystemID
+  )
+  -- If the ID's match but the CheckSums are different, then the record has changed;
+  -- therefore, update the existing record in the target, end dating the record 
+  -- and set the CurrentRecord flag to N
+  WHEN MATCHED and target.DimensionCheckSum <> source.DimensionCheckSum 
+                                 and target.CurrentRecord='Y'
+  THEN 
+  UPDATE SET 
+    EndDate=getdate()-1, 
+    CurrentRecord='N'
+  -- If the ID's do not match, then the record is new;
+  -- therefore, insert the new record into the target using the values from the source.
+  WHEN NOT MATCHED THEN  
+  INSERT 
+  (
+     SourceSystemID,
+  [Name],
+  [Department],
+    DimensionCheckSum
+  )
+  VALUES 
+  (
+    source.SourceSystemID, 
+    source.[Name],
+    source.[Department],
+    
+    source.DimensionCheckSum
+  )
+  OUTPUT $action, 
+    source.SourceSystemID, 
+    source.[Name],
+    source.[Department],
+    
+    source.DimensionCheckSum,
+    getdate(),
+    '12/31/9999'
+) -- the end of the merge statement
+--The changes output below are the records that have changed and will need
+--to be inserted into the slowly changing dimension.
+as changes 
+(
+  action, 
+  SourceSystemID,
+  [Name],
+  [Department],
+  
+  DimensionCheckSum,
+  EffectiveDate,
+  EndDate
+  
+)
+where action='UPDATE';
