@@ -1,0 +1,44 @@
+INSERT into Products (ProductID, ProductName, Rate)
+SELECT SOURCE.ProductID, SOURCE.ProductName, SOURCE.Rate
+FROM UpdatedProducts AS SOURCE
+WHERE NOT EXISTS
+(
+SELECT 1
+FROM Products AS Target
+WHERE target.Material= SOURCE.Material
+)
+
+ 
+
+ 
+
+ 
+
+--For updated / changed data (to achieve SCD)
+
+ 
+
+With SCD2 as(
+
+ 
+
+select * from dimSCD2 where activeflag=1),
+
+ 
+
+stg_Material as -- It has all those changed records from source which are required to be added in SCD2 Table with active Flag = 1
+(
+select SM.*,SCD2.DealerKey from
+stg_MaterialMaster SM join SCD2 SD on SM.Material=SD.Material
+where SM.Dimchecksum <> SD.Dimchecksum
+)
+
+ 
+
+insert into #temp_Table -- stg_Material is loaded into # temp_table
+select col1, col2,col3, ...... col2 from stg_Material
+
+ 
+
+--Now we will play with #temp_table
+--We will first insert records into dbo.dimSCD2 and then we will update dbo.dimSCD2 - activeflag, ValidFrom and ValidTo through SCD2.DealerKey
