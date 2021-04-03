@@ -1,0 +1,265 @@
+source _ https://dwgeek.com/scd-type-2-sql.html/
+
+create table PAT_DTLS_LOAD(
+SK int  NOT NULL,
+Phone_No int  NOT NULL,
+Name varchar(255)
+
+)
+
+insert  into  PAT_DTLS_LOAD(SK,Phone_No,Name) values(123,987654321,'Jhoney')
+insert  into  PAT_DTLS_LOAD(SK,Phone_No,Name) values(234,876543210,'Stuart')
+insert  into  PAT_DTLS_LOAD(SK,Phone_No,Name) values(567,345678901,'Max Stuart')
+insert  into  PAT_DTLS_LOAD(SK,Phone_No,Name) values(456,765432101,'Jeff')
+
+
+create table PAT_DTLS_TGT(
+SK int  NOT NULL,
+Phone_No int  NOT NULL,
+Name varchar(255),
+EFF_FR_DT date,
+EFF_TO_DT date,
+Flag int
+
+)
+
+create table PAT_DTLS_LOAD_INT(
+SK int  NOT NULL,
+Phone_No int  NOT NULL,
+Name varchar(255),
+EFF_FR_DT date,
+EFF_TO_DT date,
+Flag int
+)
+
+truncate table PAT_DTLS_LOAD
+truncate table PAT_DTLS_LOAD_INT
+truncate table PAT_DTLS_TGT
+
+select * from PAT_DTLS_LOAD
+select * from PAT_DTLS_LOAD_INT
+select * from PAT_DTLS_TGT
+
+insert  into  PAT_DTLS_TGT(SK,Phone_No,Name,EFF_FR_DT,EFF_TO_DT,Flag) values(345,345678901,'Jhoney Stuart','2016-06-01',null,1)
+insert  into  PAT_DTLS_TGT(SK,Phone_No,Name,EFF_FR_DT,EFF_TO_DT,Flag) values(234,234567890,'Stuart','2016-06-01',null,1)
+insert  into  PAT_DTLS_TGT(SK,Phone_No,Name,EFF_FR_DT,EFF_TO_DT,Flag) values(123,123456789,'Jhoney Stuart','2016-06-01',null,1)
+insert  into  PAT_DTLS_TGT(SK,Phone_No,Name,EFF_FR_DT,EFF_TO_DT,Flag) values(567,345678901,'Jhoney Stuart','2016-06-01',null,1)
+
+select * from  PAT_DTLS_LOAD
+select * from PAT_DTLS_TGT
+
+insert into PAT_DTLS_LOAD_INT
+select * from PAT_DTLS_TGT
+where flag = 0 and eff_to_dt is not null;
+
+
+
+
+
+
+
+--INSERT INTO PAT_DTLS_LOAD_INT
+--SELECT * FROM PAT_DTLS_TGT
+--WHERE FLAG = 0 and EFF_TO_DT is not null;
+
+--select * from PAT_DTLS_LOAD_INT
+
+--INSERT into PAT_DTLS_LOAD_INT
+--SELECT TGT.SK ,
+--TGT.PHONE_NO,
+--TGT.NAME,
+--EFF_FR_DT,
+--getdate() - 1 as EFF_TO_DT,
+--'0' as flag
+--FROM PAT_DTLS_TGT TGT
+--WHERE TGT.flag = 1
+--AND EXISTS (SELECT 1 FROM
+--PAT_DTLS_LOAD SRC
+--WHERE TGT.sk = src.sk
+--and (
+--TGT.PHONE_NO <> src.PHONE_NO
+--or TGT.NAME <> src.NAME )
+--);
+
+
+
+--INSERT INTO PAT_DTLS_LOAD_INT
+--SELECT TGT.SK ,
+--TGT.PHONE_NO,
+--TGT.NAME,
+--EFF_FR_DT,
+--EFF_TO_DT,
+--FLAG
+--FROM PAT_DTLS_TGT TGT
+--WHERE FLAG = 1
+--AND NOT EXISTS (SELECT 1 FROM
+--PAT_DTLS_LOAD SRC
+--WHERE TGT.SK = SRC.SK )
+--UNION ALL --Include unchaged records
+--SELECT TGT.SK ,
+--TGT.PHONE_NO,
+--TGT.NAME,
+--EFF_FR_DT,
+--EFF_TO_DT,
+--FLAG
+--FROM PAT_DTLS_TGT TGT
+--WHERE TGT.FLAG = 1
+--AND EXISTS (SELECT 1 FROM
+--PAT_DTLS_LOAD SRC
+--WHERE TGT.SK = SRC.SK
+--AND (
+--TGT.PHONE_NO = SRC.PHONE_NO
+--AND TGT.NAME = SRC.NAME )
+--);
+
+--select * from PAT_DTLS_LOAD_INT
+
+
+
+--INSERT INTO PAT_DTLS_LOAD_INT
+
+--SELECT SRC.SK ,
+
+--SRC.PHONE_NO,
+
+--SRC.NAME,
+
+--getdate(),
+
+--null,
+
+--1
+
+--FROM PAT_DTLS_LOAD src
+
+--WHERE EXISTS (SELECT 1
+
+--                       FROM   PAT_DTLS_LOAD_INT INT1
+
+--                       WHERE  src.sk = INT1.sk
+
+--                       AND    flag = 0
+
+--                       AND NOT EXISTS
+
+--                       (SELECT 1
+
+--                       FROM   PAT_DTLS_LOAD_INT INT2
+
+--                       WHERE  INT1.sk = INT2.sk
+
+--                       AND   flag = 1 )
+
+--                  );
+
+
+--INSERT INTO PAT_DTLS_LOAD_INT
+
+--SELECT SRC.SK ,
+
+--SRC.PHONE_NO,
+
+--SRC.NAME,
+
+--getdate(),
+
+--NULL,
+
+--1
+
+--FROM PAT_DTLS_LOAD SRC
+
+--WHERE NOT EXISTS     (SELECT 1
+
+--                       FROM   PAT_DTLS_LOAD_INT INT
+
+--                       WHERE  SRC.SK = INT.SK);
+
+--select * from PAT_DTLS_LOAD_INT
+
+
+--TRUNCATE TABLE PAT_DTLS_TGT;
+
+--INSERT INTO PAT_DTLS_TGT
+
+--SELECT * FROM PAT_DTLS_LOAD_INT;
+
+
+
+
+truncate table PAT_DTLS_LOAD_INT
+select * from PAT_DTLS_LOAD_INT
+-- Checking with flag = 0 and End date is not null in staging table
+INSERT INTO PAT_DTLS_LOAD_INT
+SELECT * FROM PAT_DTLS_TGT
+WHERE FLAG = 0 and EFF_TO_DT is not null;
+
+select * from PAT_DTLS_LOAD_INT
+
+-- if name and number is not same 
+INSERT into PAT_DTLS_LOAD_INT
+SELECT TGT.SK ,
+TGT.PHONE_NO,
+TGT.NAME,
+EFF_FR_DT,
+getdate() - 1 as EFF_TO_DT, -- get end date = current date - 1
+'0' as flag  -- if we get flag = 1,start date and defined parameter than we get flag as 0 
+FROM PAT_DTLS_TGT TGT
+WHERE TGT.flag = 1
+AND EXISTS (SELECT 1 FROM
+PAT_DTLS_LOAD SRC
+WHERE TGT.sk = src.sk
+and (
+TGT.PHONE_NO <> src.PHONE_NO -- no should not be same neither name 
+or TGT.NAME <> src.NAME )
+);
+
+--select * from PAT_DTLS_LOAD_INT
+
+INSERT INTO PAT_DTLS_LOAD_INT
+SELECT TGT.SK ,TGT.PHONE_NO,TGT.NAME,EFF_FR_DT,EFF_TO_DT,FLAG
+FROM PAT_DTLS_TGT TGT WHERE FLAG = 1
+AND NOT EXISTS 
+(SELECT 1 FROM
+PAT_DTLS_LOAD SRC
+WHERE TGT.SK = SRC.SK )
+UNION ALL --Include unchaged records
+SELECT TGT.SK ,TGT.PHONE_NO,TGT.NAME,EFF_FR_DT,EFF_TO_DT,FLAG
+FROM PAT_DTLS_TGT TGT WHERE TGT.FLAG = 1
+AND EXISTS 
+(SELECT 1 FROM
+PAT_DTLS_LOAD SRC
+WHERE TGT.SK = SRC.SK
+AND (
+TGT.PHONE_NO = SRC.PHONE_NO
+AND TGT.NAME = SRC.NAME )
+);
+
+--select * from PAT_DTLS_LOAD_INT
+
+
+
+INSERT INTO PAT_DTLS_LOAD_INT
+
+SELECT SRC.SK ,SRC.PHONE_NO,SRC.NAME,getdate(),null,1
+FROM PAT_DTLS_LOAD src
+WHERE EXISTS (SELECT 1 FROM   PAT_DTLS_LOAD_INT INT1 WHERE  src.sk = INT1.sk
+AND    flag = 0 AND NOT EXISTS
+(SELECT 1  FROM   PAT_DTLS_LOAD_INT INT2 WHERE  INT1.sk = INT2.sk AND   flag = 1 ));
+
+select * from PAT_DTLS_LOAD_INT
+
+INSERT INTO PAT_DTLS_LOAD_INT
+
+SELECT SRC.SK ,SRC.PHONE_NO,SRC.NAME,getdate(),NULL,1 FROM PAT_DTLS_LOAD SRC WHERE NOT EXISTS     
+(SELECT 1 FROM   PAT_DTLS_LOAD_INT INT
+WHERE  SRC.SK = INT.SK);
+
+select * from PAT_DTLS_LOAD_INT
+
+
+TRUNCATE TABLE PAT_DTLS_TGT;
+
+INSERT INTO PAT_DTLS_TGT
+
+SELECT * FROM PAT_DTLS_LOAD_INT;
