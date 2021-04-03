@@ -1,0 +1,28 @@
+
+select analytic.*,
+       (select count(*)
+        from analytic emp2
+        where emp2.name = analytic.name and
+              emp2.salary > analytic.salary or
+              emp2.salary = analytic.salary and emp2.name <= analytic.name
+              
+       ) as "row_number",
+       (select 1 + count(*)
+        from analytic emp2
+        where emp2.name = analytic.name and
+              emp2.salary > analytic.salary 
+              )
+        as "rank",
+       (select count(distinct salary)
+        from analytic emp2
+        where emp2.name = analytic.name and
+              emp2.salary >= analytic.salary
+       ) as "dense_rank"
+from analytic;
+
+
+SELECT *,
+   ROW_NUMBER() OVER (PARTITION BY name ORDER BY salary DESC) AS rownum,
+	 DENSE_RANK() OVER (PARTITION BY name ORDER BY salary DESC) AS denserank,
+    RANK() OVER (PARTITION BY name ORDER BY salary DESC) AS [rank]
+	from analytic
