@@ -1,0 +1,178 @@
+drop table test1
+
+CREATE TABLE test1 (
+	id1 int,
+    name nvarchar(255),
+    family varchar(255),
+    phone int,
+    email nvarchar(255),
+
+	gender nvarchar(255),
+	phone2 int,
+	address nvarchar(255),
+	birthdate date
+
+);
+
+select * from test1
+
+--insert into test1(id1,name,family,phone,email,gender,phone2,address,birthdate) values(1,'john','doe',123,'t@.com','Male',null,null,'1980-01-01')
+--insert into test1(id1,name,family,phone,email,gender,phone2,address,birthdate) values(2,'mike ','clark',65432,'x@y.com','Male',null,null,'1990-01-01')
+--insert into test1(id1,name,family,phone,email,gender,phone2,address,birthdate) values(3,'Sara ','King',875465,'a@b.com','Female',null,null,'1970-01-01')
+
+drop table test2
+
+CREATE TABLE test2 (
+	id1 int,
+    name nvarchar(255),
+    family varchar(255),
+    phone int,
+    email nvarchar(255),
+
+	gender nvarchar(255),
+	phone2 int,
+	address nvarchar(255),
+	birthdate date,
+	end date date
+
+);
+
+select * from test2
+
+--insert into test2(gender,address,phone,birthdate) values('Male','1704test','0475','1980-01-01')
+--insert into test2(gender,address,phone,birthdate) values('Female','1704abc','0986','1970-01-01')
+--insert into test2(gender,address,phone,birthdate) values('Male','1602test','0325','1990-01-01')
+
+--select * from test1
+--select * from test2
+
+
+--WITH CTE
+--     AS (SELECT T1.address AS tgt_address,
+--                T1.phone2  AS tgt_phone,
+--                T2.address AS source_address,
+--                T2.phone   AS source_phone
+--         FROM   test1 T1
+--                INNER JOIN test2 T2
+--                  ON T1.gender = T2.gender
+--                     AND T1.birthdate = T2.birthdate)
+----select * from cte
+----select * from test1
+----select * from test2
+--UPDATE CTE
+--SET    tgt_address = source_address,
+--       tgt_phone = source_phone 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+drop table test1
+
+CREATE TABLE test1 (
+	id1 int,
+    name nvarchar(255),
+    family varchar(255),
+    phone int,
+	startdate date
+ 
+);
+
+drop table test2
+
+CREATE TABLE test2 (
+	id1 int,
+    name nvarchar(255),
+    family varchar(255),
+    phone int,
+   StartDate date
+);
+
+select * from test1
+select * from test2
+
+--truncate table test1
+--truncate table test2
+
+insert into test1(id1,name,family,phone,StartDate) values(1,'john','doe',123,'2021-04-04')
+insert into test1(id1,name,family,phone,StartDate) values(2,'Names','doe',123,'2021-04-05')
+insert into test1(id1,name,family,phone,StartDate) values(3,'john','doe',123,getdate())
+
+---
+
+insert into test2
+select * from test1 
+where startdate not in (select startdate from test2)
+
+
+insert into test2
+select * from test1 
+where startdate in (select max(startdate) from test2)
+
+WITH CTE
+     AS (SELECT T1.name AS name_s,
+				T2.name as name_2,
+                T1.family  AS family_s,
+				t2.family as family_2,
+                T1.phone AS phone_s,
+				T2.Phone as phone_2,
+                T1.startdate  AS start_date,
+				t2.StartDate as start_date_2
+         FROM   test1 T1
+                INNER JOIN test2 T2
+                  ON T1.id1 = T2.id1)
+--select * from cte
+UPDATE CTE
+SET    
+--name_2 = name_s,
+	   family_2 = family_s,
+	   phone_2 = phone_s,
+	   start_date_2 = start_date
+	   where start_date_2 in (select [start_date]  from test1)
+
+
+
+
+
+
+
+
+insert into test2(id1) values(1)
+
+insert into test2(id1) values(2)
+
+insert into test2(id1) values(3)
+
+
+WITH CTE
+     AS (SELECT T1.name AS name_s,
+				T2.name as name_2,
+                T1.family  AS family_s,
+				t2.family as family_2,
+                T1.phone AS phone_s,
+				T2.Phone as phone_2,
+                T1.startdate  AS start_date,
+				t2.StartDate as start_date_2
+         FROM   test1 T1
+                INNER JOIN test2 T2
+                  ON T1.id1 = T2.id1)
+--select * from cte
+UPDATE CTE
+SET    
+--name_2 = name_s,
+	   family_2 = family_s,
+	   phone_2 = phone_s,
+	   start_date_2 = start_date
+
+
+
