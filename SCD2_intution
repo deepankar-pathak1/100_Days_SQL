@@ -1,0 +1,225 @@
+--drop table dimMaterial
+
+CREATE TABLE [dbo].[dimMaterial]
+(
+[Material] [varchar](18) NOT NULL Primary Key,
+[CreatedOn] [date] NULL,
+[LastChange] [date] NULL,
+[MaterialType] [varchar](4) NULL,
+[MaterialTypeDescription] [varchar](25) NULL,
+[IndustrySector] [varchar](1) NULL,
+[MaterialGroup] [varchar](9) NULL,
+[MaterialGroupDescription] [varchar](20) NULL,
+[OldMaterialNumber] [varchar](18) NULL,
+[BaseUOM] [varchar](3) NULL,
+[Size] [varchar](32) NULL,
+[Lab/Office] [varchar](3) NULL,
+[GrossWeight] [decimal](18, 2) NULL,
+[NetWeight] [decimal](18, 2) NULL,
+[WeightUnit] [varchar](3) NULL,
+[Volume] [decimal](18, 2) NULL,
+[VolumeUnit] [varchar](3) NULL,
+[Division] [varchar](2) NULL,
+[MaterialDescription] [varchar](40) NULL,
+[PlantStatus] [varchar](2) NULL,
+[DistributionStatus] [varchar](2) NULL,
+[2AHValue] [decimal](5, 0) NULL,
+[C20Value] [decimal](5, 0) NULL,
+[PUValue] [decimal](5, 0) NULL,
+[Brand] [varchar](18) NULL,
+[BrandDescription] [varchar](40) NULL,
+[Segment] [varchar](9) NULL,
+[activeflag] [bit] NULL,
+[ValidFrom] [date] NULL,
+[ValidTo] [date] NULL,
+[PriorityProduct] [varchar](2) NULL,
+  [DimCheckSum] [int] NULL,
+    [MaterialKey] bigint Null
+)
+
+
+--drop table MaterialMaster
+
+create table MaterialMaster
+(
+[Material] [varchar](18) NOT NULL Primary Key,
+[CreatedOn] [date] NULL,
+[LastChange] [date] NULL,
+[MaterialType] [varchar](4) NULL,
+[MaterialTypeDescription] [varchar](25) NULL,
+[IndustrySector] [varchar](1) NULL,
+[MaterialGroup] [varchar](9) NULL,
+[MaterialGroupDescription] [varchar](20) NULL,
+[OldMaterialNumber] [varchar](18) NULL,
+[BaseUOM] [varchar](3) NULL,
+[Size] [varchar](32) NULL,
+[Lab/Office] [varchar](3) NULL,
+[GrossWeight] [decimal](18, 2) NULL,
+[NetWeight] [decimal](18, 2) NULL,
+[WeightUnit] [varchar](3) NULL,
+[Volume] [decimal](18, 2) NULL,
+[VolumeUnit] [varchar](3) NULL,
+[Division] [varchar](2) NULL,
+[MaterialDescription] [varchar](40) NULL,
+[PlantStatus] [varchar](2) NULL,
+[DistributionStatus] [varchar](2) NULL,
+[2AHValue] [decimal](5, 0) NULL,
+[C20Value] [decimal](5, 0) NULL,
+[PUValue] [decimal](5, 0) NULL,
+[Brand] [varchar](18) NULL,
+[BrandDescription] [varchar](40) NULL,
+[Segment] [varchar](9) NULL,
+[activeflag] [bit] NULL,
+[ValidFrom] [date] NULL,
+[ValidTo] [date] NULL,
+[PriorityProduct] [varchar](2) NULL,
+[DimCheckSum] int null,
+ 
+    [MaterialKey] bigint Null
+)
+
+
+select * from dimMaterial
+
+
+-- check
+INSERT INTO [dimMaterial]
+select [Material], [CreatedOn], [LastChange], [MaterialType], [MaterialTypeDescription], [IndustrySector], [MaterialGroup], [MaterialGroupDescription], [OldMaterialNumber], [BaseUOM], [Size], [Lab/Office], [GrossWeight], [NetWeight], [WeightUnit], [Volume], [VolumeUnit], [Division], [MaterialDescription], [PlantStatus], [DistributionStatus], [2AHValue], [C20Value], [PUValue], [Brand], [BrandDescription], [Segment], [PriorityProduct],
+1,getdate()-1,NULL,
+[DimCheckSum]  from MaterialMaster
+where Material NOT IN (SELECT DISTINCT Material from [dbo].[dimMaterial])
+
+
+
+----------------------FOR UPDATING DATA---------------------------------
+
+
+
+CREATE TABLE #ChangedMaterialData
+(
+    [Material] [varchar](18) NOT NULL,
+    [CreatedOn] [date] NULL,
+    [LastChange] [date] NULL,
+    [MaterialType] [varchar](4) NULL,
+    [MaterialTypeDescription] [varchar](25) NULL,
+    [IndustrySector] [varchar](1) NULL,
+    [MaterialGroup] [varchar](9) NULL,
+    [MaterialGroupDescription] [varchar](20) NULL,
+    [OldMaterialNumber] [varchar](18) NULL,
+    [BaseUOM] [varchar](3) NULL,
+    [Size] [varchar](32) NULL,
+    [Lab/Office] [varchar](3) NULL,
+    [GrossWeight] [decimal](18, 2) NULL,
+    [NetWeight] [decimal](18, 2) NULL,
+    [WeightUnit] [varchar](3) NULL,
+    [Volume] [decimal](18, 2) NULL,
+    [VolumeUnit] [varchar](3) NULL,
+    [Division] [varchar](2) NULL,
+    [MaterialDescription] [varchar](40) NULL,
+    [PlantStatus] [varchar](2) NULL,
+    [DistributionStatus] [varchar](2) NULL,
+    [2AHValue] [decimal](5, 0) NULL,
+    [C20Value] [decimal](5, 0) NULL,
+    [PUValue] [decimal](5, 0) NULL,
+    [Brand] [varchar](18) NULL,
+    [BrandDescription] [varchar](40) NULL,
+    [Segment] [varchar](9) NULL,
+    [PriorityProduct] [varchar](2) NULL,
+    [DimCheckSum] [int] NULL,
+    [MaterialKey] bigint Null);
+
+
+
+truncate table  #ChangedMaterialData;
+
+--select * from MaterialMaster
+
+WITH SCD2 as (
+select * from [dimMaterial] where ActiveFlag=1 --and Material = 'DDG9-DG80R(MF)' 
+),
+--select * from SCD2
+
+
+stg_Material as(
+SELECT  SM.*, SCD.MaterialKey
+FROM 
+MaterialMaster SM 
+join
+SCD2 SCD on SCD.Material = SM.Material -- and SCD.LastChange=SM.LastChange and SCD.CreatedOn = SM.CreatedOn and SCD.MaterialDescription = SM.MaterialDescription 
+ and SCD.DimCheckSum <> SM.DimCheckSum 
+)
+
+
+insert into  #ChangedMaterialData
+select * from stg_Material;
+
+
+
+INSERT INTO [dbo].[dimMaterial] 
+select [Material], [CreatedOn], [LastChange], [MaterialType], [MaterialTypeDescription], [IndustrySector], [MaterialGroup], [MaterialGroupDescription], [OldMaterialNumber], [BaseUOM], [Size], [Lab/Office], [GrossWeight], [NetWeight], [WeightUnit], [Volume], [VolumeUnit], [Division], [MaterialDescription], [PlantStatus], [DistributionStatus], [2AHValue], [C20Value], [PUValue], [Brand], [BrandDescription], [Segment], [PriorityProduct],
+1,getdate()-1,NULL,
+[DimCheckSum]  from #ChangedMaterialData;
+
+
+UPDATE [dbo].[dimMaterial] SET ActiveFlag = 0, validto = GETDATE()-1
+from [dbo].[dimMaterial] DT 
+INNER JOIN 
+#ChangedMaterialData CMD ON CMD.MaterialKey = DT.MaterialKey
+where CMD.MaterialKey = DT.MaterialKey
+and CMD.Material = DT.Material;
+
+
+
+
+
+update [dbo].[dimMaterial] set DimCheckSum=
+BINARY_CHECKSUM([Material], 
+[CreatedOn],
+[LastChange],
+[MaterialType] ,
+[MaterialTypeDescription] ,
+[IndustrySector] ,
+[MaterialGroup] ,
+[MaterialGroupDescription] ,
+[OldMaterialNumber] ,
+[BaseUOM] ,
+[Size] ,
+[Lab/Office] ,
+[GrossWeight] ,
+[NetWeight] ,
+[WeightUnit] ,
+[Volume] ,
+[VolumeUnit] ,
+[Division] ,
+[MaterialDescription] ,
+[PlantStatus] ,
+[DistributionStatus],
+[2AHValue] ,
+[C20Value],
+[PUValue] ,
+[Brand] ,
+[BrandDescription] ,
+[Segment] ,
+[PriorityProduct]);
+
+
+END
+
+
+
+
+GO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
