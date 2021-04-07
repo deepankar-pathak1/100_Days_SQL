@@ -1,0 +1,37 @@
+CREATE TABLE tableA (
+	id1 int,
+    Name nvarchar(255),
+	start_date date,
+	end_date date 
+);
+
+
+insert into tableA(id1,name,Start_Date,End_Date) values(1,'john','12/10/2020',Null)
+insert into tableA(id1,name,Start_Date,End_Date) values(2,'sohn','12/10/2020',Null)
+insert into tableA(id1,name,Start_Date,End_Date) values(3,'rohn','12/10/2020',Null)
+
+
+
+create procedure InsertUpdatedelete
+(
+@id INTEGER,
+@name NVARCHAR(100),
+@end_date datetime
+)
+AS
+BEGIN
+
+update tableA
+set end_date=GETDATE()
+where start_date = (select max(start_date) from tableA
+where id1 =@id)
+and id1 =@id;
+
+ insert into tableA(id1,name,start_date,end_date)
+select @id,@name,GETDATE(),@end_date ;
+
+end
+
+ select * from tableA
+
+exec InsertUpdatedelete 134,'tiger',null
