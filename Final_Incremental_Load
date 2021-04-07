@@ -1,0 +1,68 @@
+drop table test3
+
+CREATE TABLE test3 (
+	id1 int,
+    Name nvarchar(255),
+  
+    Phone int,
+    
+
+	gender nvarchar(255),
+	Start_Date date,
+	End_Date date
+);
+
+CREATE TABLE test4 (
+	id1 int,
+    Name nvarchar(255),
+  
+    Phone int,
+    
+
+	gender nvarchar(255),
+	Start_Date date,
+	End_Date date
+);
+
+
+select * from test3
+select * from test4
+select max(start_date) from test4
+truncate table test4
+truncate table test3
+
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(1,'john',12345,'M','12/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(2,'john',12346,'M','11/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(3,'john',12347,'M','10/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(4,'john',12348,'M','09/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(5,'john',12349,'M','08/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(5,'john',12349,'M','10/16/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(12,'john',12340,'M',getdate(),Null)
+--insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(7,'john',12340,'M','13/10/2020',Null)
+
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(7,'john',12340,'M','14/10/2020',Null)
+--insert into test4(id1,name,phone,gender,Start_Date,End_Date) values(8,'john',12340,'M','13/10/2020',Null)
+
+INSERT INTO test4
+SELECT * from test3
+WHERE NOT EXISTS (SELECT * FROM test4)
+or Start_Date > (select max(start_date) from test4) 
+
+select * from test3
+select * from test4
+
+
+--insert into test4
+--select * from test3
+--where id1 in (select id1 from test3)
+
+--select * from test4
+
+
+--insert into test4
+--select 
+--*
+--from test3
+--where Start_Date > (select max(start_date) from test4) 
+
+----case when Start_Date < (select max(start_date) from test3) then Start_Date end)
