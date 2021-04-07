@@ -1,0 +1,257 @@
+--drop table test3
+
+CREATE TABLE test3 (
+	id1 int,
+    Name nvarchar(255),
+  
+    Phone int,
+    
+
+	gender nvarchar(255),
+	Start_Date date,
+	End_Date date,
+	DimCheckSum int null
+);
+
+CREATE TABLE test4 (
+	id1 int,
+    Name nvarchar(255),
+  
+    Phone int,
+    
+
+	gender nvarchar(255),
+	Start_Date date,
+	End_Date date,
+	DimCheckSum int null
+);
+
+create table #test5 
+
+(
+	id1 int,
+    Name nvarchar(255),
+  
+    Phone int,
+    
+
+	gender nvarchar(255),
+	Start_Date date,
+	End_Date date,
+	DimCheckSum int null
+);
+
+
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(1,'john',12345,'M','12/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(2,'john',12346,'M','11/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(3,'john',12347,'M','10/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(4,'john',12348,'M','09/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(5,'john',12349,'M','08/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(6,'john',12340,'M','07/10/2020',Null)
+
+--truncate table test3
+--truncate table test4
+
+select * from test3
+select * from test4
+
+--insert into test4
+--select 
+--id1,
+--name,phone,
+--gender,Start_Date,
+--getdate() -1,
+--DimCheckSum
+--from test3
+
+--where test3.Start_Date not in (select  test4.Start_Date from test4) 
+
+
+
+update test3 set DimCheckSum = 
+BINARY_CHECKSUM(
+[id1],[Name],[Phone],[gender],[Start_Date],[End_Date]
+)
+
+update test4 set DimCheckSum = 
+BINARY_CHECKSUM(
+[id1],[Name],[Phone],[gender],[Start_Date],[End_Date]
+)
+
+
+--- Insert Data if DimChecksum Does not Match ----
+
+
+WITH cte as (
+select * from test3 --where Start_Date not in (select distinct Start_Date from test4) 
+),
+--select * from cte
+
+cte_2 as(
+SELECT  t4.*
+FROM 
+test4 t4
+join
+cte SCD on SCD.id1 = t4.id1 
+ and SCD.DimCheckSum <> t4.DimCheckSum and scd.Start_Date not in (select  test4.Start_Date from test4) 
+)
+
+--select * from cte_2
+insert into test4
+select * from cte_2
+
+
+--- Update Data when Name is Matched and and ID is matched ---
+
+UPDATE test4 SET 
+End_Date = GETDATE()-1
+from test3 t3
+INNER JOIN 
+test4 t4
+ON t4.id1 = t3.id1
+where t3.Name = t4.Name
+and t3.Gender = t4.gender;
+
+select * from test4
+
+WITH CTE
+     AS (SELECT t3.Name AS t3_name,
+                t3.Phone  AS t3_phone,
+                t3.gender AS t3_gender,
+                t3.Start_Date   AS t3_start_date,
+				t4.Name AS t4_name,
+                t4.Phone  AS t4_phone,
+                t4.gender AS t4_gender,
+                t4.Start_Date   AS t4_start_date
+         FROM   test3 T3
+                INNER JOIN test4 T4
+                  ON t3.id1 = t4.id1
+                     where T3.Name = t4.Name AND t3.Gender = t4.gender)
+
+--select * from cte
+--select * from test1
+--select * from test2
+
+select * from cte
+UPDATE CTE
+SET    t4_name = t3_name,
+       t4_phone = t3_phone,
+	   t4_gender = t3_gender,
+	   t4_start_date = t3_start_date
+	  -- t4.end_date = getdate() - 1
+select * from cte
+
+
+-----------Ref____
+
+
+
+
+drop table test3
+
+CREATE TABLE test3 (
+	id1 int,
+    Name nvarchar(255),
+  
+    Phone int,
+    
+
+	gender nvarchar(255),
+	Start_Date date,
+	End_Date date,
+	DimCheckSum int null
+);
+
+CREATE TABLE test4 (
+	id1 int,
+    Name nvarchar(255),
+  
+    Phone int,
+    
+
+	gender nvarchar(255),
+	Start_Date date,
+	End_Date date,
+	DimCheckSum int null
+);
+
+create table #test5 
+
+(
+	id1 int,
+    Name nvarchar(255),
+  
+    Phone int,
+    
+
+	gender nvarchar(255),
+	Start_Date date,
+	End_Date date,
+	DimCheckSum int null
+);
+
+
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(1,'john',12345,'M','12/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(2,'john',12346,'M','11/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(3,'john',12347,'M','10/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(4,'john',12348,'M','09/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(5,'john',12349,'M','08/10/2020',Null)
+insert into test3(id1,name,phone,gender,Start_Date,End_Date) values(6,'john',12340,'M','07/10/2020',Null)
+
+truncate table test3
+truncate table test4
+
+select * from test3
+select * from test4
+insert into test4
+select 
+id1,
+name,phone,
+gender,Start_Date,
+getdate() -1,
+DimCheckSum
+from test3
+
+where test3.Start_Date not in (select  test4.Start_Date from test4) 
+
+
+
+update test3 set DimCheckSum = 
+BINARY_CHECKSUM(
+[id1],[Name],[Phone],[gender],[Start_Date],[End_Date]
+)
+
+update test4 set DimCheckSum = 
+BINARY_CHECKSUM(
+[id1],[Name],[Phone],[gender],[Start_Date],[End_Date]
+)
+
+
+
+WITH cte as (
+select * from test3 --where Start_Date not in (select distinct Start_Date from test4) 
+),
+--select * from cte
+
+cte_2 as(
+SELECT  t4.*
+FROM 
+test4 t4
+join
+cte SCD on SCD.id1 = t4.id1 
+ and SCD.DimCheckSum <> t4.DimCheckSum and scd.Start_Date not in (select  test4.Start_Date from test4) 
+)
+
+--select * from cte_2
+insert into test4
+select * from cte_2
+
+--select * --t4.id1,t4.name,t4.Phone,t4.gender,t4.Start_Date,t4.End_Date
+--from test3 t3
+--join test4 t4
+--on t3.id1 = t4.id1
+--where t3.DimCheckSum in (select DimCheckSum from test4)
+--where t3.DimCheckSum <> t4.DimCheckSum
+
+
+
