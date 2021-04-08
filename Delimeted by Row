@@ -126,3 +126,68 @@ from
 Testdata1 t1
 left join Testdata2 t2
 on t1.Employee_ID = t2.Employee_ID
+
+
+
+------------------------------- DONE -------------------------
+
+
+
+
+
+
+select * from TestData
+select * from TestData2
+
+
+
+--drop table Testdata1
+select * from Testdata1
+
+
+
+;WITH tmp(Manager_ID,DataItem, Employee_ID) AS
+(
+    SELECT
+        Manager_ID,
+		--CHARINDEX(',', Employee_ID + ','),
+       
+        LEFT(Employee_ID, CHARINDEX(',', Employee_ID + ',') - 1),
+        STUFF(Employee_ID, 1, CHARINDEX(',', Employee_ID + ','), '')
+    FROM Testdata
+    UNION all
+
+    SELECT
+        Manager_ID,
+        
+        LEFT(Employee_ID, CHARINDEX(',', Employee_ID + ',') - 1),
+        STUFF(Employee_ID, 1, CHARINDEX(',', Employee_ID + ','), '')
+    FROM tmp
+    WHERE
+        Employee_ID > ''
+),
+as_new as(
+
+--insert into Testdata1
+SELECT
+    Manager_ID,
+    
+    DataItem 
+	
+	FROM tmp 
+	)
+
+	--select * from as_new
+select 
+Manager_ID,
+Employee_ID,
+name
+from as_new a1
+inner join Testdata2 t2
+on 
+a1.DataItem = t2.Employee_ID
+
+
+
+select * from TestData
+select * from TestData2
