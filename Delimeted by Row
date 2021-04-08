@@ -1,0 +1,128 @@
+drop table testdata
+
+truncate table testdata
+
+CREATE TABLE Testdata
+(
+    Manager_ID INT,
+    
+    Employee_ID VARCHAR(MAX)
+)
+
+select * from Testdata
+
+drop table Testdata1
+CREATE TABLE Testdata1
+(
+    Manager_ID INT,
+   
+    Employee_ID VARCHAR(MAX)
+)
+
+INSERT Testdata SELECT 1, '18,20,22'
+INSERT Testdata SELECT 2, '17,19'
+
+
+CREATE TABLE Testdata2
+(
+    Employee_ID INT,
+   name nvarchar(255)
+)
+
+insert into Testdata2(Employee_ID,name) values(18,'Ramesh')
+insert into Testdata2(Employee_ID,name) values(17,'Manoj')
+insert into Testdata2(Employee_ID,name) values(19,'Suresh')
+
+select * from testdata
+select * from Testdata1
+select * from Testdata2
+
+
+;WITH tmp(Manager_ID,DataItem, Employee_ID) AS
+(
+    SELECT
+        Manager_ID,
+		--CHARINDEX(',', Employee_ID + ','),
+       
+        LEFT(Employee_ID, CHARINDEX(',', Employee_ID + ',') - 1),
+        STUFF(Employee_ID, 1, CHARINDEX(',', Employee_ID + ','), '')
+    FROM Testdata
+    UNION all
+
+    SELECT
+        Manager_ID,
+        
+        LEFT(Employee_ID, CHARINDEX(',', Employee_ID + ',') - 1),
+        STUFF(Employee_ID, 1, CHARINDEX(',', Employee_ID + ','), '')
+    FROM tmp
+    WHERE
+        Employee_ID > ''
+),
+as_new as(
+
+--insert into Testdata1
+SELECT
+    Manager_ID,
+    
+    DataItem 
+	
+	FROM tmp 
+	)
+select 
+Manager_ID,
+Employee_ID,
+name
+from as_new a1
+inner join Testdata2 t2
+on 
+a1.DataItem = t2.Employee_ID
+
+
+
+
+
+
+-----
+
+
+
+select * from Testdata2
+
+left join Testdata2 t2
+on t1.Employee_ID = t2.Employee_ID
+
+
+
+select t2.Employee_ID,t2.name as [Name]
+from 
+Testdata1 t1
+left join Testdata2 t2
+on t1.Employee_ID = t2.Employee_ID
+
+
+
+
+
+
+select * from Testdata1
+
+--drop table testdata2
+--CREATE TABLE Testdata2
+--(
+--    Employee_ID INT,
+--   name nvarchar(255)
+--)
+
+--insert into Testdata2(Employee_ID,name) values(18,'Ramesh')
+--insert into Testdata2(Employee_ID,name) values(17,'Manoj')
+--insert into Testdata2(Employee_ID,name) values(19,'Suresh')
+
+--select * from Testdata
+select * from Testdata2
+select * from Testdata1 --cte
+
+select t2.Employee_ID,t2.name as [Name]
+from 
+Testdata1 t1
+left join Testdata2 t2
+on t1.Employee_ID = t2.Employee_ID
