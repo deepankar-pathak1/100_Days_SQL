@@ -1,0 +1,52 @@
+---  https://www.youtube.com/watch?v=N7XYyTy4lz8&list=PL08903FB7ACA1C2FB&index=94&ab_channel=kudvenkat
+
+--- DDL triggers fire in response to DDL events - CREATE, ALTER, and DROP  ---
+
+CREATE TRIGGER trMyFirstTrigger
+ON Database
+FOR CREATE_TABLE
+AS
+BEGIN
+   Print 'New table created'
+END
+
+Create Table Test (Id int)
+
+
+ALTER TRIGGER trMyFirstTrigger
+ON Database
+FOR CREATE_TABLE, ALTER_TABLE, DROP_TABLE
+AS
+BEGIN
+   Print 'A table has just been created, modified or deleted'
+END
+
+drop table Test
+
+
+ALTER TRIGGER trMyFirstTrigger
+ON Database
+FOR CREATE_TABLE, ALTER_TABLE, DROP_TABLE
+AS
+BEGIN
+   Rollback 
+   Print 'You cannot create, alter or drop a table'
+END
+
+create table test1 (Id int)
+
+DISABLE TRIGGER trMyFirstTrigger ON DATABASE -- disable Trigger
+Enable TRIGGER trMyFirstTrigger ON DATABASE  -- Enable Trigger
+
+DROP TRIGGER trMyFirstTrigger ON DATABASE -- to drop the trigger
+
+
+CREATE TRIGGER trRenameTable
+ON DATABASE
+FOR RENAME
+AS
+BEGIN
+    Print 'You just renamed something'
+END
+
+sp_rename 'Test1', 'NewTestTable'
