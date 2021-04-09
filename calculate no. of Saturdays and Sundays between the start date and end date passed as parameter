@@ -1,0 +1,59 @@
+--- calculate no. of Saturdays and Sundays between the start date and end date passed as parameter
+
+-- Approach 1 ---
+
+
+
+alter procedure weekdays @startdate DATETIME,@EndDate DATETIME
+as
+
+
+DECLARE @StartDate DATETIME
+DECLARE @EndDate DATETIME
+
+SET @StartDate = '2008/10/01'
+SET @EndDate = '2008/11/28'
+
+
+
+   --select (DATEDIFF(dd, @StartDate, @EndDate) + 1) 
+   select (DATEDIFF(wk, @StartDate, @EndDate)*2) as SAT_SUN
+
+go
+
+exec weekdays '2021/01/01','2021/04/30'
+
+
+--- Approach 2 ---
+
+
+alter proc count_s_s @StartDate datetime null ,@EndDate Datetime null
+
+as
+
+--declare @StartDate datetime
+--declare @EndDate Datetime
+
+--SET @StartDate = '2021/03/01'
+--SET @EndDate = '2021/04/30'
+
+
+
+declare @apart_s_s int = 
+   (DATEDIFF(dd, @StartDate, @EndDate) + 1)
+  -(DATEDIFF(wk, @StartDate, @EndDate) * 2)
+  -(CASE WHEN DATENAME(dw, @StartDate) = 'Sunday' THEN 1 ELSE 0 END)
+  -(CASE WHEN DATENAME(dw, @EndDate) = 'Saturday' THEN 1 ELSE 0 END)
+
+declare @all int = (DATEDIFF(dd, @StartDate, @EndDate) + 1)
+
+print @apart_s_S
+print @all
+print 'Total Number of Saturday and Sunday ' 
+print @all - @apart_s_s
+
+go
+
+exec count_s_s '2021/01/01','2021/04/30'
+
+_____ 86,120,34
