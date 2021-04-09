@@ -1,0 +1,75 @@
+-- Source :- https://www.youtube.com/watch?v=k0S4P-a6d5w&t=331s&ab_channel=kudvenkat
+
+
+--- DML Trigger ---
+
+-- DML triggers are fired, when ever data is modified using INSERT, UPDATE, and DELETE events.
+
+
+-- After Trigger 
+
+CREATE TABLE tblEmployee
+(
+  Id int Primary Key,
+  Name nvarchar(30),
+  Salary int,
+  Gender nvarchar(10),
+  DepartmentId int
+)
+
+CREATE TABLE tblEmployeeAudit
+(
+  Id int identity(1,1) primary key,
+  AuditData nvarchar(1000)
+)
+
+select * from tblEmployee
+
+
+Insert into tblEmployee values (1,'John', 5000, 'Male', 3)
+Insert into tblEmployee values (2,'Mike', 3400, 'Male', 2)
+Insert into tblEmployee values (3,'Pam', 6000, 'Female', 1)
+
+
+
+
+alter TRIGGER tr_tblEMployee_ForInsert
+ON tblEmployee
+FOR INSERT -- create a inserted table and it will create only for trigger action 
+AS
+BEGIN 
+--select * from inserted 
+
+ Declare @Id int
+ Select @Id = Id from inserted
+ 
+ insert into tblEmployeeAudit 
+ values('New employee with Id  = ' + Cast(@Id as nvarchar(5)) + ' is added at ' + cast(Getdate() as nvarchar(20)))
+END
+
+Insert into tblEmployee values (5,'Pam', 6000, 'Female', 1) 
+-- when we execute this command after executing trigger an inserted 
+-- table will be created which will have one row and identical column as tblEmployee
+
+select * from tblEmployee
+select * from tblEmployeeAudit
+
+
+
+create trigger tr_tblEmployee_ForDelete
+on tblEmployee
+for delete 
+as
+begin 
+declare @ID int 
+select @ID = Id from deleted
+
+insert into tblEmployeeAudit
+values('An Existing Record With ID  =' + cast(@ID as nvarchar(5)) +'is deleted at '+ cast(getdate() as nvarchar(20)))
+
+end
+
+delete from tblEmployee where id = 2
+
+select * from tblEmployee
+select * from tblEmployeeAudit
